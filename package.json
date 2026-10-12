@@ -1,0 +1,16 @@
+{
+  "name": "sungong-diary",
+  "version": "1.0.0",
+  "private": true,
+  "description": "순공 다이어리 — TOPIK II 6급 공부 타이머 (Android)",
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/local-notifications": "^7.0.0",
+    "@capacitor/preferences": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}
