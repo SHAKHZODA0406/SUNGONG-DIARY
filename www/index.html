@@ -173,6 +173,35 @@ button,input,select,textarea{font:inherit;color:inherit}
 .mlist input{width:56px;padding:5px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-variant-numeric:tabular-nums;text-align:right}
 .mlist .empty{border-style:dashed;color:var(--muted);display:block}
 
+/* vocab review */
+.vk{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.vk.done{border-color:var(--grass);background:color-mix(in oklab,var(--grass) 6%,var(--surface))}
+.vkh{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;cursor:pointer}
+div.vkh{grid-template-columns:minmax(0,1fr) auto;cursor:default}
+.vkh input{width:26px;height:26px;accent-color:var(--grass)}
+.vkh b{font-size:15.5px}
+.vkh small{display:block;font-size:12px;color:var(--muted)}
+.vk details summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--navy)}
+.wt{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px}
+.wt td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.wt td:first-child{font-weight:700;width:42%}
+.plan9{display:flex;flex-wrap:wrap;gap:5px}
+.plan9 span{font-size:11.5px;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--muted);font-variant-numeric:tabular-nums}
+.plan9 span.due{background:var(--write);color:#fff}
+.mp{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.mp li{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.mp li.now{border-color:var(--write);box-shadow:0 0 0 2px color-mix(in oklab,var(--write) 18%,transparent)}
+.mp li.fin{opacity:.7}
+.mp li b{font-size:14.5px}
+.mp .pills span.ok{background:color-mix(in oklab,var(--grass) 16%,var(--surface));color:var(--grass)}
+.mp li.empty{display:block;border-style:dashed;color:var(--muted)}
+@media (max-width:600px){.mp li{grid-template-columns:minmax(0,1fr) auto}.mp li .pills{grid-column:1 / -1;order:3}}
+.vchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.vchip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;padding:5px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg);cursor:pointer}
+.vchip input{width:18px;height:18px;accent-color:var(--grass)}
+.vchip small{color:var(--muted);font-weight:600}
+.vchip:has(input:checked){border-color:var(--grass);color:var(--grass)}
+
 /* pomodoro */
 .pomo{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
 .pomo.brk{background:color-mix(in oklab,var(--grass) 10%,var(--surface));border-color:var(--grass)}
@@ -585,6 +614,11 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
       </section>
       <section class="panel tasks" id="tasks">
         <h2>오늘의 할 일 <small>단어 · 모의고사 · 다시 듣기 · 오답 · 쓰기 표현</small></h2>
+        <div class="task" id="tk-voc">
+          <span class="ck"></span>
+          <div class="tb"><b>단어 복습<small>모의고사 단어장</small></b><span id="vtSub">—</span><div class="vchips" id="vtList"></div></div>
+          <div class="ta"><button type="button" class="sbtn" data-goto="vocab">단어장 보기</button></div>
+        </div>
         <div class="task" id="tk-words">
           <span class="ck"></span>
           <div class="tb"><b>단어 암기</b><span id="wSub">—</span><div class="mini"><i id="wBar"></i></div></div>
@@ -619,6 +653,11 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
       </section>
       <div class="cards" id="cards"></div>
 
+      <section class="panel">
+        <h2>모의고사 순서 <small id="mpProg">—</small></h2>
+        <p class="hint">듣기부터: 풀기 → 분석 → 모르는 단어로 단어장 만들기 → 복습. 다 끝나면 읽기 · 쓰기로 넘어가요.</p>
+        <ul class="mp" id="mpHome"></ul>
+      </section>
       <section class="panel mock" id="mockCard">
         <div class="mock-h"><h2>모의고사 <small>순공 시간과 따로 기록돼요</small></h2><span class="live"><i></i>시험 중</span></div>
         <div class="mock-grid">
@@ -754,6 +793,26 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
         <ul class="tracks" id="podList"></ul>
         <p class="hint">TOPIK 공식 홈페이지(topik.go.kr)에 공개된 기출문제 듣기 MP3나 교재 MP3를 휴대폰에 내려받은 뒤 <b>MP3 가져오기</b>를 누르세요. 앱 안에 저장되어 인터넷 없이도 들을 수 있어요. 이름을 눌러 회차로 바꿔 두면 다시 듣기 기록과 연결돼요.</p>
       </div>
+    </section>
+
+    <!-- 단어 복습 -->
+    <section class="screen" id="s-vocab" hidden>
+      <div class="sh"><div><h1>단어 복습</h1><p>외우지 말고 읽기 · 다음 날부터 매일 3번 → 2일마다 3번 → 3일마다 3번</p></div><span class="pill" id="vkCount">—</span></div>
+      <div class="panel"><h2>오늘 복습할 단어장 <small>한 번 쭉 읽고 체크</small></h2><div class="wlist" id="vkDue"></div></div>
+      <div class="panel"><h2>모의고사 순서 <small id="mpProg2">—</small></h2><ul class="mp" id="mpVocab"></ul>
+        <form class="row" id="mpForm"><label class="field">회차 추가<input type="number" id="mpN" min="1" max="200" placeholder="예: 60" inputmode="numeric"></label><label class="field">영역<select id="mpPart"><option value="listen">듣기</option><option value="read">읽기</option><option value="write">쓰기</option></select></label><button class="btn" type="submit">추가</button></form></div>
+      <div class="panel" id="vkFormBox">
+        <h2>단어장 만들기 <small>모의고사 분석 후 모르는 단어</small></h2>
+        <form class="fields" id="vkForm">
+          <label class="field">회차<input type="text" id="vkRound" maxlength="30" placeholder="예: 제35회"></label>
+          <label class="field">영역<select id="vkSec"><option value="listen">듣기</option><option value="read">읽기</option><option value="write">쓰기</option></select></label>
+          <label class="field">정리한 날<input type="date" id="vkDate"></label>
+          <label class="field" style="grid-column:1 / -1">단어 (선택) · 한 줄에 하나씩 "단어 - 뜻"<textarea id="vkWords" rows="6" placeholder="예:&#10;간과하다 - e'tiborsiz qoldirmoq&#10;대두되다 - paydo bo'lmoq, ko'tarilmoq"></textarea></label>
+          <div class="row" style="grid-column:1 / -1"><button class="btn" type="submit" id="vkSave">단어장 저장</button><button class="btn ghost" type="button" id="vkCancel" hidden>취소</button></div>
+        </form>
+        <p class="hint">단어 파일을 따로 만들었다면 단어는 비워 두고 저장만 해도 돼요. 정리한 다음 날부터 복습 날짜가 자동으로 정해져요. 하루 놓치면 그다음 일정이 그날부터 다시 계산돼요.</p>
+      </div>
+      <div class="panel"><h2>전체 단어장 <small>복습 일정</small></h2><div class="wlist" id="vkAll"></div></div>
     </section>
 
     <!-- 오답 노트 -->
@@ -1049,6 +1108,8 @@ function normalize(s){
     pomoDay:(s.pomoDay&&typeof s.pomoDay==='object')?Object.assign({},s.pomoDay):{},
     sessions:Array.isArray(s.sessions)?s.sessions.filter(x=>x&&x.id&&x.f).slice(-3000):[],
     journal:(s.journal&&typeof s.journal==='object')?JSON.parse(JSON.stringify(s.journal)):{},
+    decks:Array.isArray(s.decks)?s.decks.filter(d=>d&&d.id&&d.name).map(d=>({id:d.id,name:String(d.name),sec:['listen','read','write'].includes(d.sec)?d.sec:'listen',created:/^\d{4}-\d{2}-\d{2}$/.test(d.created||'')?d.created:dk(new Date()),words:String(d.words||''),reviews:Array.isArray(d.reviews)?[...new Set(d.reviews.filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x)))].sort().slice(0,9):[]})):[],
+    mplan:Array.isArray(s.mplan)&&s.mplan.length?s.mplan.filter(x=>x&&+x.n).map(x=>({n:+x.n,part:['listen','read','write'].includes(x.part)?x.part:'listen'})):[35,36,37,41,47,52,83,96].map(n=>({n,part:'listen'})),
     results:Array.isArray(s.results)?s.results.filter(r=>r&&r.id&&r.name).map(normRes):[],
     words:(()=>{const w={};if(s.words&&typeof s.words==='object')Object.entries(s.words).forEach(([k,v])=>{if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&+v>0)w[k]=Math.round(+v);});return w;})(),
     wordGoal:Math.max(0,num(s.wordGoal,DEF.wordGoal)),
@@ -1161,10 +1222,10 @@ function morningLine(n,d){const pick=a=>a[dayNum(d)%a.length];
   if(n===null||n<0)return pick(MORNING.after);if(n===0)return MORNING.day[0];if(n<=2)return pick(MORNING.last);if(n<=7)return pick(MORNING.week);return pick(MORNING.far);}
 
 /* ---------- nav ---------- */
-const NAV={timer:['timer'],study:['note','phrase','pod','plan'],ana:['ana','score'],log:['log','report','journal'],set:['set']};
-const SUBN={note:'오답 노트',phrase:'쓰기 표현',pod:'듣기 플레이어',plan:'주간 계획',ana:'모의고사 분석',score:'성적 · 예상 점수',log:'공부 기록',report:'주간 리포트',journal:'다짐 · 회고'};
+const NAV={timer:['timer'],study:['vocab','note','phrase','pod','plan'],ana:['ana','score'],log:['log','report','journal'],set:['set']};
+const SUBN={vocab:'단어 복습',note:'오답 노트',phrase:'쓰기 표현',pod:'듣기 플레이어',plan:'주간 계획',ana:'모의고사 분석',score:'성적 · 예상 점수',log:'공부 기록',report:'주간 리포트',journal:'다짐 · 회고'};
 const ALL_SCREENS=[].concat(...Object.values(NAV));
-let curSub=Object.assign({study:'note',ana:'ana',log:'log'},lsGet('sungong-sub')||{});
+let curSub=Object.assign({study:'vocab',ana:'ana',log:'log'},lsGet('sungong-sub')||{});
 let curTop='timer';
 function showTop(top){const L=NAV[top];if(!L)return show('timer');show(L.includes(curSub[top])?curSub[top]:L[0]);}
 function show(tab){if(!ALL_SCREENS.includes(tab)){if(NAV[tab])return showTop(tab);tab='timer';}
@@ -1173,9 +1234,9 @@ function show(tab){if(!ALL_SCREENS.includes(tab)){if(NAV[tab])return showTop(tab
   ALL_SCREENS.forEach(t=>{const el=$('s-'+t);if(el)el.hidden=t!==scr;});
   document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.go===top)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   renderSubtabs();lsSet(LS_TAB,scr);window.scrollTo(0,0);
-  try{({report:()=>renderReport(),journal:()=>renderJr(),score:()=>{scores();renderPred();},plan:()=>renderPlan(),note:()=>renderWn(),phrase:()=>renderPh(),ana:()=>renderAna(),pod:()=>renderPod(),log:()=>render(),timer:()=>render()})[scr]?.();}catch(e){}}
+  try{({vocab:()=>renderVoc(),report:()=>renderReport(),journal:()=>renderJr(),score:()=>{scores();renderPred();},plan:()=>renderPlan(),note:()=>renderWn(),phrase:()=>renderPh(),ana:()=>renderAna(),pod:()=>renderPod(),log:()=>render(),timer:()=>render()})[scr]?.();}catch(e){}}
 function renderSubtabs(){const st=$('subtabs');const list=NAV[curTop];if(!list||list.length<2){st.hidden=true;return;}st.hidden=false;
-  const badge={note:typeof wnDueCount==='function'?wnDueCount():0};
+  const badge={note:typeof wnDueCount==='function'?wnDueCount():0,vocab:typeof deckPending==='function'?deckPending().length:0};
   st.innerHTML=list.map(t=>`<button type="button" data-sub="${t}" aria-pressed="${curSub[curTop]===t}">${SUBN[t]}${badge[t]?'<span class="n">'+badge[t]+'</span>':''}</button>`).join('');}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-sub],[data-goto]');if(!b)return;show(b.dataset.sub||b.dataset.goto);});
 document.querySelector('.nav').addEventListener('click',e=>{const b=e.target.closest('button[data-go]');if(b)showTop(b.dataset.go);});
@@ -1217,7 +1278,7 @@ async function scheduleAll(){
         const qd=ORDER.reduce((a,k)=>a+quotaOn(k,day),0);const plan=(n!==null&&n>0&&remAll>60)?(qd>60?' · 오늘 기본 공부 '+kmin(qd):' · 오늘은 쉬는 날'):'';
         const t0=atTime(day,state.notif.dday);
         if(t0.getTime()>now+30000)list.push({id:1000+d*10,channelId:'sungong',schedule:{at:t0,allowWhileIdle:true},
-          title:(n!==null&&n>=0)?'TOPIK II '+ddayStr(n)+' · '+date:'GKS · 연세대를 향해 · '+date,body:morningLine(n,day)+plan});
+          title:(n!==null&&n>=0)?'TOPIK II '+ddayStr(n)+' · '+date:'GKS · 연세대를 향해 · '+date,body:morningLine(n,day)+plan+(vocDueOn(dk(day))?' · 단어 복습 '+vocDueOn(dk(day))+'개':'')});
         state.notif.times.forEach((tm,i)=>{const at=atTime(day,tm);if(at.getTime()<=now+30000)return;
           list.push({id:1000+d*10+i+1,channelId:'sungong',schedule:{at,allowWhileIdle:true},
             title:'순공 다이어리'+((n!==null&&n>=0)?' · '+ddayStr(n):''),body:MOTTOS[(dn*7+i)%MOTTOS.length]});});
@@ -1332,7 +1393,7 @@ function build(){
     state.relisten.push({id:Date.now(),date:dk(new Date()),name});$('rlName').value='';$('rlName').blur();save();renderTasks();renderMocks();toast(name+' 듣기 다시 듣기 완료!');});
   $('wGoal').addEventListener('change',e=>{state.wordGoal=Math.max(0,Math.round(+e.target.value||0));save();renderTasks();});
   // transfer
-  $('xOut').addEventListener('click',()=>{const code='SG2:'+btoa(unescape(encodeURIComponent(JSON.stringify({log:state.log,mocks:state.mocks,course:state.course,scores:state.scores,words:state.words,relisten:state.relisten,results:state.results,distract:state.distract,awaySec:state.awaySec,badges:state.badges,sessions:state.sessions,journal:state.journal,pomoDay:state.pomoDay,wn:state.wn,ph:state.ph,week:state.week,gks:state.gks}))));
+  $('xOut').addEventListener('click',()=>{const code='SG2:'+btoa(unescape(encodeURIComponent(JSON.stringify({log:state.log,mocks:state.mocks,course:state.course,scores:state.scores,words:state.words,relisten:state.relisten,results:state.results,distract:state.distract,awaySec:state.awaySec,badges:state.badges,sessions:state.sessions,journal:state.journal,pomoDay:state.pomoDay,wn:state.wn,ph:state.ph,week:state.week,gks:state.gks,decks:state.decks,mplan:state.mplan}))));
     const ta=$('xfer');ta.value=code;ta.focus();ta.select();
     const done=()=>toast('코드를 복사했어요. 다른 기기에 붙여 넣으세요');
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done).catch(()=>{try{document.execCommand('copy');done();}catch(e){toast('코드를 길게 눌러 복사하세요');}});
@@ -1349,6 +1410,7 @@ function build(){
       Object.entries(data.journal).forEach(([k,j])=>{const m=state.journal[k];if(!m){state.journal[k]=j;n++;}else{['l','h','n','sleep','cond'].forEach(f=>{if((m[f]===null||m[f]===undefined||m[f]==='')&&j[f]!==null&&j[f]!==undefined&&j[f]!==''){m[f]=j[f];n++;}});}});
       Object.entries(data.pomoDay).forEach(([k,v])=>{if(v>(state.pomoDay[k]||0)){state.pomoDay[k]=v;n++;}});
       Object.entries(data.wn).forEach(([k,w])=>{const m=state.wn[k];if(!m||(w.last||'')>(m.last||'')){state.wn[k]=w;n++;}});
+      data.decks.forEach(d=>{const m=state.decks.find(x=>x.id===d.id);if(!m){state.decks.push(d);n++;}else{const u=[...new Set(m.reviews.concat(d.reviews))].sort().slice(0,9);if(u.length!==m.reviews.length){m.reviews=u;n++;}if(!m.words&&d.words)m.words=d.words;}});
       Object.entries(data.ph.known).forEach(([k,v])=>{if(!state.ph.known[k]){state.ph.known[k]=v;n++;}});
       data.relisten.forEach(r=>{if(!state.relisten.some(x=>x.id===r.id)){state.relisten.push(r);n++;}});
       save();render();$('xfer').value='';toast(n?'기록을 가져왔어요 ('+n+'개 항목 갱신)':'이미 최신 기록이에요');}
@@ -1905,7 +1967,7 @@ function render(){
     return `<div class="ss" style="--c:var(--${k})"><b>${s.ko}</b><div class="r"><div class="track"><div style="width:${tot?done/tot*100:100}%"></div></div><span>기본 ${kmin(done)} / ${state.course.total[k]}시간 · 추가 ${kmin(sumAll('x_'+k))}</span></div></div>`;}).join('');
   setVal('wGoal',state.wordGoal);renderLofi();
   $('fcOn').checked=state.focus.on;setVal('rwHours',state.reward.hours);setVal('rwInput',state.reward.text);
-  bars(today);scores();renderMocks();renderTasks();renderAna();renderGrowth();renderPod();renderV2();renderV3();live();renderNotif();
+  bars(today);scores();renderMocks();renderTasks();renderAna();renderGrowth();renderPod();renderV2();renderV3();renderVoc();renderVocTask();live();renderNotif();
 }
 
 function bars(today){
@@ -2253,6 +2315,85 @@ function renderV3(){renderPomo();renderJr();renderReport();renderPred();renderAn
   setVal('nReview',state.notif.review);
   const p=predict();if(p)$('scoreChip').textContent+=' · 예상 '+p.pred+'점';}
 
+/* ================= 단어 복습 (모의고사별 단어장 · 1-1-1-2-2-2-3-3-3 복습) ================= */
+const INTV=[1,1,1,2,2,2,3,3,3];
+const SECKO={listen:'듣기',read:'읽기',write:'쓰기'};
+function roundOf(name){const m=String(name||'').match(/(\d+)\s*회/);return m?+m[1]:null;}
+function deckNext(d){const n=d.reviews.length;if(n>=INTV.length)return null;const base=n?d.reviews[n-1]:d.created;return addDays(base,INTV[n]);}
+function deckPlan(d){const out=[];let base=d.reviews.length?d.reviews[d.reviews.length-1]:d.created;for(let i=d.reviews.length;i<INTV.length;i++){base=addDays(base,INTV[i]);out.push(base);}return out;}
+function deckDue(){const t=dk(new Date());return state.decks.filter(d=>d.reviews.includes(t)||(deckNext(d)&&deckNext(d)<=t));}
+function deckPending(){const t=dk(new Date());return deckDue().filter(d=>!d.reviews.includes(t));}
+function parseWords(txt){return String(txt||'').split(/\n/).map(l=>l.trim()).filter(Boolean).map(l=>{const m=l.match(/^(.+?)\s*(?:\t| - | – | — |:|=)\s*(.+)$/);return m?[m[1],m[2]]:[l,''];});}
+function wordTable(d){const w=parseWords(d.words);if(!w.length)return '<p class="hint">단어를 아직 안 넣었어요. 수정을 눌러 붙여 넣으면 여기서 바로 읽을 수 있어요.</p>';
+  return '<table class="wt">'+w.map(([a,b])=>`<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join('')+'</table>';}
+function deckDots(d){return '<span class="dots">'+INTV.map((x,i)=>`<i class="${i<d.reviews.length?'on':''}"></i>`).join('')+'</span>';}
+function fmtD(key){const d=new Date(key+'T00:00:00');return (d.getMonth()+1)+'/'+d.getDate()+'('+WD[d.getDay()]+')';}
+let vkEdit=null,vkDelArm=null;
+function mpStatus(n,part){const done=state.mocks.some(m=>roundOf(m.name)===n&&(m.part===part||m.part==='all'||(part==='listen'&&m.part==='p1')||(part==='write'&&m.part==='p1')||(part==='read'&&m.part==='p2')));
+  const r=state.results.find(x=>roundOf(x.name)===n);const ana=!!(r&&r[part]&&r[part].done);
+  const deck=state.decks.find(d=>roundOf(d.name)===n&&d.sec===part);
+  const file=part==='listen'&&state.audio.some(a=>roundOf(a.name)===n);
+  const rl=state.relisten.filter(x=>roundOf(x.name)===n).length;
+  return {done,ana,deck,file,rl,mock:state.mocks.find(m=>roundOf(m.name)===n)};}
+function renderMp(){const rows=state.mplan;let cur=-1;
+  const html=rows.map((x,i)=>{const s2=mpStatus(x.n,x.part);const fin=s2.done&&s2.ana&&s2.deck;if(cur<0&&!fin)cur=i;
+    const act=!s2.done?`<button type="button" class="sbtn pri" data-mpgo="${x.n}|${x.part}">풀기</button>`
+      :!s2.ana?`<button type="button" class="sbtn pri" data-mpana="${x.n}|${x.part}">분석하기</button>`
+      :!s2.deck?`<button type="button" class="sbtn pri" data-mpdeck="${x.n}|${x.part}">단어장 만들기</button>`
+      :`<span class="pill">복습 ${s2.deck.reviews.length}/9</span>`;
+    return `<li class="${i===cur?'now':''}${fin?' fin':''}"><b>제${x.n}회 <span style="color:var(--${x.part})">${SECKO[x.part]}</span></b>
+      <div class="pills">${i===cur?'<span class="t" style="--c:var(--write)">지금 할 차례</span>':''}<span class="${s2.done?'ok':''}">풀기${s2.done?' ✓':''}</span><span class="${s2.ana?'ok':''}">분석${s2.ana?' ✓':''}</span><span class="${s2.deck?'ok':''}">단어장${s2.deck?' ✓':''}</span>${x.part==='listen'?`<span class="${s2.file?'ok':''}">파일${s2.file?' ✓':' 없음'}</span><span>다시 듣기 ${s2.rl}회</span>`:''}</div>${act}</li>`;}).join('');
+  const total=rows.length,fin=rows.filter(x=>{const s2=mpStatus(x.n,x.part);return s2.done&&s2.ana&&s2.deck;}).length;
+  ['mpHome','mpVocab'].forEach(id=>{const el=$(id);if(el)el.innerHTML=html||'<li class="empty">모의고사 회차를 추가하세요.</li>';});
+  ['mpProg','mpProg2'].forEach(id=>{const el=$(id);if(el)el.textContent=fin+' / '+total+' 완료';});}
+function renderVoc(){const t=dk(new Date());const due=deckDue();
+  $('vkDue').innerHTML=due.length?due.map(d=>{const on=d.reviews.includes(t);const nx=deckNext(d);const late=!on&&nx&&nx<t?Math.round((new Date(t)-new Date(nx))/86400000):0;
+    return `<div class="vk${on?' done':''}"><label class="vkh"><input type="checkbox" data-vk="${d.id}" ${on?'checked':''} aria-label="${esc(d.name)} 복습 완료"><span><b>${esc(d.name)}</b><small>${on?'오늘 복습 완료!':(d.reviews.length+1)+'번째 복습 · 9번 중'}${late?' · '+late+'일 밀림':''} · 단어 ${parseWords(d.words).length}개</small></span>${deckDots(d)}</label>
+      <details><summary>단어 보기</summary>${wordTable(d)}</details></div>`;}).join('')
+    :'<p class="empty-note">오늘은 복습할 단어장이 없어요. 모의고사를 분석하고 모르는 단어를 정리하면 여기에 순서대로 나타나요.</p>';
+  $('vkCount').textContent=due.length?due.filter(d=>d.reviews.includes(t)).length+' / '+due.length+' 완료':'없음';
+  const all=state.decks.slice().sort((a,b)=>a.created<b.created?1:-1);
+  $('vkAll').innerHTML=all.length?all.map(d=>{const nx=deckNext(d);const plan=deckPlan(d);
+    return `<div class="vk"><div class="vkh"><span><b>${esc(d.name)}</b><small>만든 날 ${fmtD(d.created)} · 단어 ${parseWords(d.words).length}개 · ${nx?'다음 복습 '+fmtD(nx):'9번 복습 완료!'}</small></span>${deckDots(d)}</div>
+      ${plan.length?`<div class="plan9">${plan.map(x=>`<span class="${x<=t?'due':''}">${fmtD(x)}</span>`).join('')}</div>`:''}
+      <details><summary>단어 보기</summary>${wordTable(d)}</details>
+      <div class="acts"><button type="button" class="sbtn" data-vkedit="${d.id}">수정</button><button type="button" class="sbtn" data-vkdel="${d.id}">${vkDelArm===d.id?'정말 삭제':'삭제'}</button></div></div>`;}).join('')
+    :'<p class="empty-note">아직 단어장이 없어요. 위의 순서에서 <b>단어장 만들기</b>를 누르거나 아래에서 직접 만드세요.</p>';
+  if(!$('vkDate').value)$('vkDate').value=t;
+  $('vkSave').textContent=vkEdit?'수정 저장':'단어장 저장';$('vkCancel').hidden=!vkEdit;
+  renderMp();renderSubtabs();}
+function vkForm(n,part,deck){show('vocab');if(deck){vkEdit=deck.id;$('vkRound').value=deck.name.replace(/\s*(듣기|읽기|쓰기)$/,'');$('vkSec').value=deck.sec;$('vkDate').value=deck.created;$('vkWords').value=deck.words;}
+  else{vkEdit=null;$('vkRound').value='제'+n+'회';$('vkSec').value=part;$('vkDate').value=dk(new Date());$('vkWords').value='';}
+  renderVoc();setTimeout(()=>{$('vkFormBox').scrollIntoView({behavior:'smooth',block:'start'});$('vkWords').focus();},80);}
+function goMock(n,part){state.mockDraft.name='제'+n+'회';state.mockDraft.part=part;save();show('timer');render();setTimeout(()=>$('mockCard').scrollIntoView({behavior:'smooth',block:'start'}),80);}
+function renderVocTask(){const t=dk(new Date());const due=deckDue();
+  $('vtList').innerHTML=due.map(d=>`<label class="vchip"><input type="checkbox" data-vk="${d.id}" ${d.reviews.includes(t)?'checked':''}>${esc(d.name)} <small>${Math.min(9,d.reviews.length+(d.reviews.includes(t)?0:1))}/9</small></label>`).join('');
+  const p=deckPending().length;$('vtSub').textContent=due.length?(p?'오늘 복습할 단어장 '+p+'개 · 다 읽고 체크하세요':'오늘 단어 복습 끝! 수고했어요'):(state.decks.length?'오늘은 복습할 단어장이 없어요':'모의고사 분석 후 모르는 단어로 단어장을 만들면 여기에 나와요');
+  $('tk-voc').classList.toggle('done',state.decks.length>0&&p===0);}
+function bindVoc(){
+  document.addEventListener('change',e=>{const c=e.target.closest('[data-vk]');if(!c)return;const d=state.decks.find(x=>x.id===c.dataset.vk);if(!d)return;const t=dk(new Date());
+    if(c.checked){if(!d.reviews.includes(t))d.reviews.push(t);toast(d.reviews.length>=9?d.name+' · 9번 복습 완료! 이제 내 단어예요':d.name+' 복습 완료 · 다음은 '+fmtD(deckNext(d)));}
+    else d.reviews=d.reviews.filter(x=>x!==t);save();renderVoc();renderVocTask();scheduleAll();});
+  document.addEventListener('click',e=>{const g=e.target.closest('[data-mpgo],[data-mpana],[data-mpdeck]');if(!g)return;const [n,part]=(g.dataset.mpgo||g.dataset.mpana||g.dataset.mpdeck).split('|');
+    if(g.dataset.mpgo)goMock(+n,part);
+    else if(g.dataset.mpana){const m=state.mocks.find(x=>roundOf(x.name)===+n);openEditor(m?m.name:'제'+n+'회',m?m.date:dk(new Date()),part);}
+    else vkForm(+n,part);});
+  $('vkAll').addEventListener('click',e=>{const ed=e.target.closest('[data-vkedit]'),dl=e.target.closest('[data-vkdel]');
+    if(ed){vkForm(0,'listen',state.decks.find(x=>x.id===ed.dataset.vkedit));}
+    if(dl){const id=dl.dataset.vkdel;if(vkDelArm!==id){vkDelArm=id;renderVoc();setTimeout(()=>{if(vkDelArm===id){vkDelArm=null;renderVoc();}},4000);return;}
+      vkDelArm=null;state.decks=state.decks.filter(x=>x.id!==id);save();renderVoc();renderVocTask();toast('단어장을 삭제했어요');}});
+  $('vkForm').addEventListener('submit',e=>{e.preventDefault();let r=$('vkRound').value.trim();if(!r){toast('회차를 입력하세요 (예: 제35회)');return;}
+    if(/^\d+$/.test(r))r='제'+r+'회';const sec=$('vkSec').value;const name=r+' '+SECKO[sec];const created=$('vkDate').value||dk(new Date());const words=$('vkWords').value;
+    if(vkEdit){const d=state.decks.find(x=>x.id===vkEdit);if(d){d.name=name;d.sec=sec;d.created=created;d.words=words;}toast('단어장을 수정했어요');}
+    else{if(state.decks.some(d=>d.name===name)){toast('같은 이름의 단어장이 이미 있어요. 수정으로 바꿔 주세요');return;}
+      state.decks.push({id:'vk'+Date.now(),name,sec,created,words,reviews:[]});toast(name+' 단어장 저장! 내일부터 복습이 시작돼요');}
+    vkEdit=null;$('vkWords').value='';save();renderVoc();renderVocTask();scheduleAll();});
+  $('vkCancel').addEventListener('click',()=>{vkEdit=null;$('vkWords').value='';renderVoc();});
+  $('mpForm').addEventListener('submit',e=>{e.preventDefault();const n=parseInt($('mpN').value,10);const part=$('mpPart').value;if(!n){toast('회차 번호를 입력하세요');return;}
+    if(state.mplan.some(x=>x.n===n&&x.part===part)){toast('이미 목록에 있어요');return;}state.mplan.push({n,part});$('mpN').value='';save();renderMp();});
+}
+function vocDueOn(key){return state.decks.filter(d=>deckPlan(d).includes(key)||(key===dk(new Date())&&deckPending().includes(d))).length;}
+
 /* ---------- motto rotation ---------- */
 let mi=Math.floor(Math.random()*MOTTOS.length);
 function nextMotto(){const b=$('motto');b.classList.add('fade');setTimeout(()=>{mi=(mi+1)%MOTTOS.length;$('mottoText').textContent=MOTTOS[mi];if(focusOpen)$('fMotto').textContent=MOTTOS[mi];b.classList.remove('fade');},350);}
@@ -2261,7 +2402,7 @@ $('motto').addEventListener('click',nextMotto);
 setInterval(nextMotto,15000);
 
 /* ---------- start ---------- */
-build();bindAna();bindLofi();bindGrowth();bindPod();bindGks();bindPlan();bindWn();bindPh();bindPomo();bindRate();bindJr();bindReport();bindCps();
+build();bindAna();bindLofi();bindGrowth();bindPod();bindGks();bindPlan();bindWn();bindPh();bindPomo();bindRate();bindJr();bindReport();bindCps();bindVoc();
 onReturn();
 const savedTab=lsGet(LS_TAB);show(ALL_SCREENS.includes(savedTab)?savedTab:'timer');
 save();render();
