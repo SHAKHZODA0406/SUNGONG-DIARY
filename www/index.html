@@ -269,10 +269,10 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
           <button class="motto" id="motto" type="button"><small>오늘의 한마디 · 탭하면 다음</small><span id="mottoText"></span></button>
         </div>
         <div class="times">
-          <div class="tbox"><small>오늘 순공 (강의+자습)</small><b id="todayTotal">0:00:00</b><span id="todayPct">—</span></div>
+          <div class="tbox"><small>오늘 순공 (기본+추가)</small><b id="todayTotal">0:00:00</b><span id="todayPct">—</span></div>
           <div class="tbox"><small>총 누적 시간</small><b id="allTotal">0:00:00</b><span id="mockToday">오늘 모의고사 0회</span></div>
           <div class="tbox wide">
-            <div class="top"><small>강의 진도 · <span id="cTotalLbl">76시간</span></small><b id="cPct">0%</b></div>
+            <div class="top"><small>목표 진도 · <span id="cTotalLbl">76시간</span></small><b id="cPct">0%</b></div>
             <div class="hbar"><i id="cBar"></i></div>
             <span id="cSub">—</span>
           </div>
@@ -300,7 +300,7 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
       <div class="sh"><div><h1>공부 기록</h1><p>매일 쌓이는 순공 시간 · 모의고사 기록</p></div></div>
       <div class="grid2">
         <div class="panel">
-          <h2>공부 잔디 <small>최근 18주 · 강의+자습</small></h2>
+          <h2>공부 잔디 <small>최근 18주 · 기본+추가</small></h2>
           <div class="heat-scroll"><div class="heat-wrap">
             <div class="days"><span>월</span><span></span><span>수</span><span></span><span>금</span><span></span><span>일</span></div>
             <div class="heat" id="heat"></div>
@@ -314,13 +314,13 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
           </div>
         </div>
         <div class="panel bars">
-          <h2>주간 기록 <small>강의+자습</small></h2>
+          <h2>주간 기록 <small>기본+추가</small></h2>
           <div id="barsBox"></div>
           <div class="keys"><span><i style="background:var(--listen)"></i>듣기</span><span><i style="background:var(--read)"></i>읽기</span><span><i style="background:var(--write)"></i>쓰기</span></div>
         </div>
       </div>
       <div class="grid2">
-        <div class="panel"><h2>영역별 누적 <small>강의 진도 · 자습</small></h2><div class="secsum" id="secsum"></div></div>
+        <div class="panel"><h2>영역별 누적 <small>목표 진도 · 추가 공부</small></h2><div class="secsum" id="secsum"></div></div>
         <div class="panel"><h2>모의고사 기록 <small>점수를 입력해 두세요</small></h2><ul class="mlist" id="mAllList"></ul></div>
       </div>
     </section>
@@ -339,21 +339,21 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
 
     <!-- 설정 -->
     <section class="screen" id="s-set" hidden>
-      <div class="sh"><div><h1>설정</h1><p>강의 계획 · 목표 · 알림 · 기록 관리</p></div></div>
+      <div class="sh"><div><h1>설정</h1><p>목표 시간 · 알림 · 기록 관리</p></div></div>
       <div class="panel">
-        <h2>강의 계획 <small>무료 TOPIK 강의 · 시험 전 완강</small></h2>
+        <h2>목표 공부 시간 <small>시험까지 영역별 총 시간</small></h2>
         <p class="hint" id="planHint">—</p>
         <div style="overflow-x:auto"><table class="plan" id="planTable"></table></div>
         <div class="fields three" id="courseFields"></div>
-        <p class="hint">강의 시간이 다르면 위 숫자를 고치세요. 매일 남은 강의 시간을 남은 날짜로 나눠서 하루 강의 목표가 자동으로 바뀌어요.</p>
+        <p class="hint">목표 시간을 바꾸고 싶으면 위 숫자를 고치세요. 남은 목표 시간을 남은 날짜로 나눠서 하루 기본 공부 시간이 매일 자동으로 바뀌어요.</p>
       </div>
       <div class="grid2">
         <div class="panel">
-          <h2>자습 · 목표 <small>강의 후 추가 공부</small></h2>
+          <h2>추가 공부 · 목표 <small>기본 공부 후 더 하는 공부</small></h2>
           <div class="fields">
-            <label class="field c" style="--c:var(--listen)">듣기 자습 · 하루 (분)<input type="number" id="x-listen" min="0" max="600" step="5"></label>
-            <label class="field c" style="--c:var(--read)">읽기 자습 · 하루 (분)<input type="number" id="x-read" min="0" max="600" step="5"></label>
-            <label class="field c" style="--c:var(--write)">쓰기 자습 · 하루 (분)<input type="number" id="x-write" min="0" max="600" step="5"></label>
+            <label class="field c" style="--c:var(--listen)">듣기 추가 · 하루 (분)<input type="number" id="x-listen" min="0" max="600" step="5"></label>
+            <label class="field c" style="--c:var(--read)">읽기 추가 · 하루 (분)<input type="number" id="x-read" min="0" max="600" step="5"></label>
+            <label class="field c" style="--c:var(--write)">쓰기 추가 · 하루 (분)<input type="number" id="x-write" min="0" max="600" step="5"></label>
             <label class="field">목표 점수<input type="number" id="goal" min="0" max="300" step="1"></label>
             <label class="field">시험 날짜<input type="date" id="examDate"></label>
           </div>
@@ -363,7 +363,7 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
           <p class="hint">타이머를 깜빡했을 때 오늘 기록에 더하거나 뺄 수 있어요. 빼려면 음수(예: -10)를 입력하세요.</p>
           <form class="row" id="adjForm">
             <label class="field">영역<select id="adjSec"><option value="write">쓰기</option><option value="read">읽기</option><option value="listen">듣기</option></select></label>
-            <label class="field">종류<select id="adjMode"><option value="c">강의</option><option value="x">자습</option></select></label>
+            <label class="field">종류<select id="adjMode"><option value="c">기본 공부</option><option value="x">추가 공부</option></select></label>
             <label class="field">시간 (분)<input type="number" id="adjMin" step="5" placeholder="30"></label>
             <button class="btn" type="submit">추가</button>
           </form>
@@ -404,7 +404,7 @@ const SECS=[
   {k:'read',ko:'읽기',en:'Reading',meta:'2교시 · 50문항 · 70분',avg:53.30},
   {k:'write',ko:'쓰기',en:'Writing',meta:'1교시 · 4문항 · 50분',avg:34.81}
 ];
-const MODES={c:'강의',x:'자습'};
+const MODES={c:'기본',x:'추가'};
 const MOCK_PARTS=[
   {k:'p1',ko:'1교시 (듣기+쓰기)',min:110},
   {k:'p2',ko:'2교시 (읽기)',min:70},
@@ -441,7 +441,7 @@ function normalize(s){
   s=s&&typeof s==='object'?s:{};
   const n=s.notif||{};const times=Array.isArray(n.times)?n.times:[];
   const log=(s.log&&typeof s.log==='object')?JSON.parse(JSON.stringify(s.log)):{};
-  // 예전 버전 기록(영역 이름만 있는 키)은 자습으로 옮김
+  // 예전 버전 기록(영역 이름만 있는 키)은 추가 공부로 옮김
   Object.values(log).forEach(day=>{SECS.forEach(x=>{if(day&&day[x.k]){day['x_'+x.k]=(day['x_'+x.k]||0)+day[x.k];delete day[x.k];}});});
   const c=s.course||{};const per=(o,d)=>{const r={};SECS.forEach(x=>r[x.k]=Math.max(0,num(o&&o[x.k],d[x.k])));return r;};
   const sc={};SECS.forEach(x=>{const v=s.scores&&s.scores[x.k];sc[x.k]=(v===null||v===undefined||v==='')?DEF.scores[x.k]:Math.max(0,Math.min(100,+v||0));});
@@ -486,7 +486,7 @@ function kmin(sec){const m=Math.round(sec/60);const h=Math.floor(m/60);return h?
 function daysLeft(from){if(!state.examDate)return null;return Math.round((new Date(state.examDate+'T00:00:00')-new Date(dk(from)+'T00:00:00'))/86400000)}
 function ddayStr(n){return n===null?'D-?':n>0?'D-'+n:n===0?'D-DAY':'D+'+(-n)}
 
-/* 강의 계획: 남은 강의 ÷ 시험 전날까지 남은 날 */
+/* 목표 계획: 남은 목표 시간 ÷ 시험 전날까지 남은 날 */
 function studyDays(day){const n=daysLeft(day);return (n===null||n<=0)?1:n;}
 function courseTotal(k){return state.course.total[k]*3600}
 function courseDoneBefore(k,todayKey){let v=state.course.done[k]*3600;
@@ -505,7 +505,7 @@ const MOTTOS=[
   'GKS 합격 통지서는 오늘 공부한 사람에게 도착한다.',
   '6급은 재능이 아니라 쌓인 순공 시간이다.',
   '5급에서 6급까지 단 7점. 오늘 그 7점을 채우자.',
-  '쓰기 61점 → 70점이면 6급이다. 오늘도 쓰기 강의부터!',
+  '쓰기 61점 → 70점이면 6급이다. 오늘도 쓰기부터!',
   '피곤해도 딱 25분만. 시작이 반이다.',
   '남들이 쉴 때 한 문제 더. 그 차이가 장학생을 만든다.',
   '꿈은 크게, 오늘 할 일은 작게, 그리고 매일.',
@@ -526,14 +526,14 @@ const MOTTOS=[
   '54번 쓰기, 오늘 한 편만 더 써 보자. 구조가 몸에 익을 때까지.',
   '틀린 문제는 다음 시험의 점수다. 오답 노트를 펼치자.',
   '지금 이 10분이 쌓여 연세 합격증이 된다.',
-  '바쁜 하루였지? 그래도 오늘 강의 한 편은 할 수 있어.',
+  '바쁜 하루였지? 그래도 오늘 쓰기 한 편은 할 수 있어.',
   '오늘 공부하지 않을 이유보다 해야 할 이유가 더 크다.',
   '경영학 석사의 첫 수업을 연세에서 듣는 날을 위해.',
   'TOPIK 6급 다음은 IELTS 6.0. 한 단계씩 확실하게.',
   '오늘의 나를 이기면 내일의 시험도 이긴다.'
 ];
 const MORNING={
-  far:['좋은 아침! 오늘 첫 순공은 쓰기 강의로 시작해 볼까?','오늘도 루틴대로. 작은 하루가 모여 6급이 된다.','아침의 30분이 저녁의 3시간보다 강하다.','오늘 계획: 강의 먼저, 그다음 자습!','어제보다 한 지문 더. 그게 오늘의 목표.'],
+  far:['좋은 아침! 오늘 첫 순공은 쓰기로 시작해 볼까?','오늘도 루틴대로. 작은 하루가 모여 6급이 된다.','아침의 30분이 저녁의 3시간보다 강하다.','오늘 계획: 기본 공부 먼저, 그다음 추가 공부!','어제보다 한 지문 더. 그게 오늘의 목표.'],
   week:['마지막 일주일. 새로운 것보다 틀린 문제 복습!','오늘은 실전처럼 시간 재고 모의고사 한 회.','쓰기 51~54번 답안 구조를 한 번 더 점검하자.'],
   last:['거의 다 왔다. 오늘은 가볍게 복습하고 일찍 자기.','충분히 준비했어. 컨디션 관리가 마지막 공부야.'],
   day:['오늘 시험! 수험표·신분증 챙기고, 지금까지의 순공 시간을 믿자. 화이팅!'],
@@ -583,7 +583,7 @@ async function scheduleAll(){
         const day=new Date(today.getFullYear(),today.getMonth(),today.getDate()+d);
         const n=daysLeft(day);const dn=dayNum(day);
         const date=(day.getMonth()+1)+'월 '+day.getDate()+'일 ('+WD[day.getDay()]+')';
-        const plan=(n!==null&&n>0&&remAll>60)?' · 오늘 강의 약 '+kmin(remAll/studyDays(today)):'';
+        const plan=(n!==null&&n>0&&remAll>60)?' · 오늘 기본 공부 약 '+kmin(remAll/studyDays(today)):'';
         const t0=atTime(day,state.notif.dday);
         if(t0.getTime()>now+30000)list.push({id:1000+d*10,channelId:'sungong',schedule:{at:t0,allowWhileIdle:true},
           title:(n!==null&&n>=0)?'TOPIK II '+ddayStr(n)+' · '+date:'GKS · 연세대를 향해 · '+date,body:morningLine(n,day)+plan});
@@ -626,21 +626,21 @@ const C=2*Math.PI*54;
 const ICON_PLAY='<svg viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z"/></svg>';
 const ICON_PAUSE='<svg viewBox="0 0 16 16"><rect x="3.5" y="2.5" width="3" height="11" rx="1"/><rect x="9.5" y="2.5" width="3" height="11" rx="1"/></svg>';
 const ICON_STOP='<svg viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="1.5"/></svg>';
-const ORDER=['write','read','listen']; // 강의가 많은 순서
+const ORDER=['write','read','listen']; // 목표 시간이 많은 순서
 function build(){
   $('cards').innerHTML=ORDER.map(k=>{const s=SECS.find(x=>x.k===k);return `
   <article class="tc" id="card-${k}" style="--c:var(--${k})">
     <div class="tc-h"><div><div class="name"><h3>${s.ko}</h3><span class="en">${s.en}</span></div><span class="meta">${s.meta}</span></div><span class="live"><i></i>공부 중</span></div>
-    <div class="seg" role="group" aria-label="${s.ko} 공부 종류"><button type="button" data-m="c"><span class="rd"></span>강의</button><button type="button" data-m="x"><span class="rd"></span>자습</button></div>
+    <div class="seg" role="group" aria-label="${s.ko} 공부 종류"><button type="button" data-m="c"><span class="rd"></span>기본 공부</button><button type="button" data-m="x"><span class="rd"></span>추가 공부</button></div>
     <div class="tc-body">
       <div class="dial"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="track" cx="60" cy="60" r="54"/><circle class="prog" cx="60" cy="60" r="54" stroke-dasharray="${C}" stroke-dashoffset="0"/></svg>
-        <div class="dial-in"><small class="lbl">오늘 강의 남은 시간</small><span class="clock">00:00:00</span><span class="sub"></span></div></div>
+        <div class="dial-in"><small class="lbl">오늘 기본 남은 시간</small><span class="clock">00:00:00</span><span class="sub"></span></div></div>
       <div class="info">
         <div class="facts"><span>오늘 <b class="done">0분</b></span><span>목표 <b class="tgt">0분</b></span></div>
         <button class="go" type="button"></button>
       </div>
     </div>
-    <div class="cprog"><div class="row2"><span>강의 진도 <b class="cp">0%</b></span><span class="cr">—</span></div><div class="bar"><i></i></div></div>
+    <div class="cprog"><div class="row2"><span>목표 진도 <b class="cp">0%</b></span><span class="cr">—</span></div><div class="bar"><i></i></div></div>
   </article>`;}).join('');
   $('cards').addEventListener('click',e=>{const card=e.target.closest('.tc');if(!card)return;const k=card.id.slice(5);
     const sb=e.target.closest('.seg button');if(sb){state.view[k]=sb.dataset.m;save();live();return;}
@@ -661,9 +661,9 @@ function build(){
   });
   // course fields
   $('courseFields').innerHTML=ORDER.map(k=>{const s=SECS.find(x=>x.k===k);return `
-    <div class="field" style="--c:var(--${k})"><b style="font-family:var(--f-serif);color:var(--c);font-size:15px">${s.ko} 강의</b>
-      <label class="field c" style="--c:var(--${k})">전체 강의 시간 (시간)<input type="number" id="ct-${k}" min="0" max="500" step="0.5"></label>
-      <label class="field c" style="--c:var(--${k})">이미 들은 시간 (시간)<input type="number" id="cd-${k}" min="0" max="500" step="0.5"></label></div>`;}).join('');
+    <div class="field" style="--c:var(--${k})"><b style="font-family:var(--f-serif);color:var(--c);font-size:15px">${s.ko}</b>
+      <label class="field c" style="--c:var(--${k})">목표 공부 시간 (시간)<input type="number" id="ct-${k}" min="0" max="500" step="0.5"></label>
+      <label class="field c" style="--c:var(--${k})">이미 공부한 시간 (시간)<input type="number" id="cd-${k}" min="0" max="500" step="0.5"></label></div>`;}).join('');
   ORDER.forEach(k=>{
     $('ct-'+k).addEventListener('change',e=>{state.course.total[k]=Math.max(0,+e.target.value||0);save();render();timerNotify();scheduleAll();});
     $('cd-'+k).addEventListener('change',e=>{state.course.done[k]=Math.max(0,+e.target.value||0);save();render();timerNotify();scheduleAll();});
@@ -736,7 +736,7 @@ function live(){
     card.querySelectorAll('.seg button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.m===m?'true':'false');b.classList.toggle('run',!!(r&&r.f===b.dataset.m+'_'+k));});
     card.querySelector('.lbl').textContent=!tg?'오늘 '+MODES[m]:over?MODES[m]+' 목표 달성':'오늘 '+MODES[m]+' 남은 시간';
     card.querySelector('.clock').textContent=!tg?clock(sec):over?'+'+clock(-rem).replace(/^00:/,''):clock(rem);
-    card.querySelector('.sub').textContent=!tg?(m==='c'?'강의 완강!':'목표 없음'):over?'초과 공부 중':Math.floor(sec/tg*100)+'% 완료';
+    card.querySelector('.sub').textContent=!tg?(m==='c'?'목표 달성!':'목표 없음'):over?'초과 공부 중':Math.floor(sec/tg*100)+'% 완료';
     card.querySelector('.prog').setAttribute('stroke-dashoffset',tg?C*Math.min(sec/tg,1):C);
     card.querySelector('.done').textContent=kmin(sec);
     card.querySelector('.tgt').textContent=kmin(tg);
@@ -744,7 +744,7 @@ function live(){
     if(go.dataset.st!==want){go.dataset.st=want;go.classList.toggle('pause',on);go.innerHTML=on?ICON_PAUSE+MODES[m]+' 일시정지':ICON_PLAY+MODES[m]+(sec>0?' 이어서 하기':' 시작');}
     const tot=courseTotal(k),done=courseDoneAll(k);const pct=tot?Math.min(100,done/tot*100):100;
     card.querySelector('.cp').textContent=Math.floor(pct)+'%';
-    card.querySelector('.cr').textContent=tot?(done>=tot?'완강!':kmin(done)+' / '+state.course.total[k]+'시간'):'강의 없음';
+    card.querySelector('.cr').textContent=tot?(done>=tot?'달성!':kmin(done)+' / '+state.course.total[k]+'시간'):'목표 없음';
     card.querySelector('.cprog .bar i').style.width=pct+'%';
     if(on&&tg&&prevRem[f]>0&&rem<=0&&!document.hidden){chime();toast(s.ko+' '+MODES[m]+' 오늘 목표 달성! 수고했어요');}
     prevRem[f]=rem;
@@ -770,15 +770,15 @@ function live(){
   const cT=SECS.reduce((a,s)=>a+courseTotal(s.k),0),cD=SECS.reduce((a,s)=>a+Math.min(courseTotal(s.k),courseDoneAll(s.k)),0);
   const cQ=SECS.reduce((a,s)=>a+courseQuota(s.k),0);
   $('cTotalLbl').textContent=Math.round(cT/360)/10+'시간';$('cPct').textContent=(cT?Math.floor(cD/cT*100):100)+'%';$('cBar').style.width=(cT?cD/cT*100:100)+'%';
-  $('cSub').textContent=kmin(cD)+' 완료 · 남은 '+kmin(Math.max(0,cT-cD))+' · 하루 강의 '+kmin(cQ);
+  $('cSub').textContent=kmin(cD)+' 완료 · 남은 '+kmin(Math.max(0,cT-cD))+' · 하루 기본 '+kmin(cQ);
   // nudge
   const cl=ORDER.map(k=>({k,left:target('c_'+k)-secOn(key,'c_'+k)})).filter(x=>x.left>=60);
   const xl=ORDER.map(k=>({k,left:target('x_'+k)-secOn(key,'x_'+k)})).filter(x=>x.left>=60);
   const n=$('nudge'),t=$('nudgeText');const nm=k=>SECS.find(s=>s.k===k).ko;
-  if(!cl.length&&!xl.length){n.classList.add('done');t.innerHTML='오늘 강의와 자습을 모두 끝냈어요. <b>수고했어요!</b>'+(mt.length?'':' 여유가 있다면 모의고사 한 영역 어때요?');}
+  if(!cl.length&&!xl.length){n.classList.add('done');t.innerHTML='오늘 기본 공부와 추가 공부를 모두 끝냈어요. <b>수고했어요!</b>'+(mt.length?'':' 여유가 있다면 모의고사 한 영역 어때요?');}
   else{n.classList.remove('done');const parts=[];
-    if(cl.length)parts.push('강의 남음 · '+cl.map(x=>'<b>'+nm(x.k)+'</b> '+kmin(x.left)).join(' · '));
-    if(xl.length)parts.push('자습 남음 · '+xl.map(x=>'<b>'+nm(x.k)+'</b> '+kmin(x.left)).join(' · '));
+    if(cl.length)parts.push('기본 남음 · '+cl.map(x=>'<b>'+nm(x.k)+'</b> '+kmin(x.left)).join(' · '));
+    if(xl.length)parts.push('추가 남음 · '+xl.map(x=>'<b>'+nm(x.k)+'</b> '+kmin(x.left)).join(' · '));
     t.innerHTML=parts.join('<br>');}
 }
 
@@ -813,9 +813,9 @@ function render(){
   let days=0,all=0;allKeys().forEach(k=>{const v=dayTotal(k);all+=v;if(v>=MIN)days++;});
   // plan table
   const sd=studyDays(today);
-  $('planHint').innerHTML=n!==null&&n>0?'시험까지 <b>'+n+'일</b> 남았어요 (오늘 포함, 시험 당일 제외). 남은 강의를 이 날짜로 나눈 <b>하루 강의 목표</b>예요.':'시험 날짜가 지났어요. 하루 강의 목표는 남은 강의 전체로 표시돼요.';
+  $('planHint').innerHTML=n!==null&&n>0?'시험까지 <b>'+n+'일</b> 남았어요 (오늘 포함, 시험 당일 제외). 남은 목표 시간을 이 날짜로 나눈 <b>하루 기본 공부</b>예요.':'시험 날짜가 지났어요. 하루 기본 공부는 남은 목표 시간 전체로 표시돼요.';
   let tq=0,tr=0,tt=0;
-  $('planTable').innerHTML='<tr><th>영역</th><th>전체 강의</th><th>남은 강의</th><th>하루 강의</th><th>하루 자습</th></tr>'+ORDER.map(k=>{const s=SECS.find(x=>x.k===k);
+  $('planTable').innerHTML='<tr><th>영역</th><th>목표 시간</th><th>남은 시간</th><th>하루 기본</th><th>하루 추가</th></tr>'+ORDER.map(k=>{const s=SECS.find(x=>x.k===k);
     const rem=Math.max(0,courseTotal(k)-courseDoneBefore(k,key));const q=rem/sd;tq+=q;tr+=rem;tt+=courseTotal(k);
     return `<tr style="--c:var(--${k})"><td><b>${s.ko}</b></td><td>${state.course.total[k]}시간</td><td>${kmin(rem)}</td><td>${kmin(q)}</td><td>${kmin(state.extra[k]*60)}</td></tr>`;}).join('')+
     `<tr class="sum"><td>합계</td><td>${Math.round(tt/360)/10}시간</td><td>${kmin(tr)}</td><td>${kmin(tq)}</td><td>${kmin(SECS.reduce((a,s)=>a+state.extra[s.k]*60,0))}</td></tr>`;
@@ -830,7 +830,7 @@ function render(){
   let s7=0;for(let i=0;i<7;i++){const d=new Date(today);d.setDate(today.getDate()-i);s7+=dayTotal(dk(d));}
   $('k7').textContent=kmin(s7);$('kAll').textContent=kmin(all);$('kDays').textContent=days+'일';
   $('secsum').innerHTML=ORDER.map(k=>{const s=SECS.find(x=>x.k===k);const tot=courseTotal(k),done=Math.min(tot,courseDoneAll(k));
-    return `<div class="ss" style="--c:var(--${k})"><b>${s.ko}</b><div class="r"><div class="track"><div style="width:${tot?done/tot*100:100}%"></div></div><span>강의 ${kmin(done)} / ${state.course.total[k]}시간 · 자습 ${kmin(sumAll('x_'+k))}</span></div></div>`;}).join('');
+    return `<div class="ss" style="--c:var(--${k})"><b>${s.ko}</b><div class="r"><div class="track"><div style="width:${tot?done/tot*100:100}%"></div></div><span>기본 ${kmin(done)} / ${state.course.total[k]}시간 · 추가 ${kmin(sumAll('x_'+k))}</span></div></div>`;}).join('');
   bars(today);scores();renderMocks();live();renderNotif();
 }
 
@@ -856,7 +856,7 @@ function scores(){
   const weak=SECS.reduce((a,s)=>sc[s.k]<sc[a.k]?s:a,SECS[0]);
   const parts=[];if(sum<230)parts.push('6급까지 <b>'+(230-sum)+'점</b>');if(sum<goal)parts.push('목표까지 <b>'+(goal-sum)+'점</b>');
   $('advice').innerHTML=(parts.length?parts.join(', ')+' 남았어요. ':'목표 점수를 달성했어요! ')+'가장 낮은 영역은 <b>'+weak.ko+' ('+sc[weak.k]+'점)</b>이에요. '+
-    (weak.k==='write'?'강의 계획에서도 쓰기가 '+state.course.total.write+'시간으로 가장 많아요. 쓰기 강의를 매일 가장 먼저 듣고, 자습 시간에는 51~54번 답안을 직접 써 보세요.':'이 영역의 자습 시간을 늘리면 점수를 올리기 가장 좋아요.');
+    (weak.k==='write'?'목표 시간도 쓰기가 '+state.course.total.write+'시간으로 가장 많아요. 매일 쓰기부터 시작하고, 추가 공부 시간에는 51~54번 답안을 직접 써 보세요.':'이 영역의 추가 공부 시간을 늘리면 점수를 올리기 가장 좋아요.');
 }
 
 /* ---------- motto rotation ---------- */
