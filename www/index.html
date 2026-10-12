@@ -173,6 +173,51 @@ button,input,select,textarea{font:inherit;color:inherit}
 .mlist input{width:56px;padding:5px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-variant-numeric:tabular-nums;text-align:right}
 .mlist .empty{border-style:dashed;color:var(--muted);display:block}
 
+/* analysis */
+.ed-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.editor{border-color:var(--navy);box-shadow:0 0 0 3px color-mix(in oklab,var(--navy) 15%,transparent)}
+.seg3{display:grid;grid-template-columns:repeat(3,1fr);background:var(--soft);border-radius:10px;padding:3px;gap:3px}
+.seg3 button{border:0;background:transparent;border-radius:8px;padding:8px 6px;font-weight:700;color:var(--muted);cursor:pointer;font-size:14px}
+.seg3 button[aria-pressed="true"]{background:var(--surface);color:var(--c);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg3 button small{display:block;font-size:11px;font-weight:600;color:var(--muted)}
+.edsum{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.edsum b{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
+.edsum span{font-size:12.5px;color:var(--muted)}
+.qgrid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:5px}
+.qgrid button{aspect-ratio:1;border:1px solid var(--line);background:var(--bg);border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;padding:0;font-variant-numeric:tabular-nums;min-width:0}
+.qgrid button.x{background:var(--write);border-color:var(--write);color:#fff}
+.wrongs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.wrong{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;align-items:center;font-size:13px}
+.wrong b{color:var(--write);font-variant-numeric:tabular-nums}
+.wrong select{padding:7px 8px;border:1px solid var(--line);border-radius:9px;background:var(--bg);font-size:13px;min-width:0;width:100%}
+.wrong select.unset{color:var(--muted)}
+.wfields{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:600px){.wfields{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tagset{display:flex;flex-wrap:wrap;gap:6px}
+.tagset button{border:1px solid var(--line);background:var(--bg);border-radius:99px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer}
+.tagset button[aria-pressed="true"]{background:var(--write);border-color:var(--write);color:#fff}
+.stat-bars{display:flex;flex-direction:column;gap:9px}
+.sb{display:grid;grid-template-columns:minmax(0,118px) minmax(40px,1fr) auto;gap:10px;align-items:center;font-size:13px}
+.sb .t{height:10px;border-radius:99px;background:var(--soft);overflow:hidden}
+.sb .t i{display:block;height:100%;border-radius:99px;background:var(--c,var(--write))}
+.sb span:last-child{text-align:right;white-space:nowrap;color:var(--muted);font-variant-numeric:tabular-nums}
+.sb .lb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rng{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;align-items:end;height:120px;padding-top:14px}
+.rng div{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;height:100%;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.rng i{display:block;width:70%;max-width:44px;background:var(--c);border-radius:6px 6px 2px 2px;min-height:2px}
+.rng b{color:var(--ink);font-size:12px}
+.alist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.alist li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.alist .nm b{font-size:15px}
+.alist .nm small{display:block;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.alist .sc3{display:flex;gap:10px;flex-wrap:wrap;font-size:12.5px;margin-top:4px;font-variant-numeric:tabular-nums}
+.alist .sc3 span{color:var(--c);font-weight:700}
+.alist .empty{display:block;border-style:dashed;color:var(--muted)}
+.trend svg{width:100%;height:auto;display:block}
+.trend text{fill:var(--muted);font-size:10px;font-family:var(--f-sans)}
+.trend .gl{stroke:var(--line);stroke-width:1}
+.empty-note{margin:0;padding:18px;border:1px dashed var(--line);border-radius:12px;color:var(--muted);font-size:13.5px;text-align:center}
+
 /* panels */
 .grid2{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:16px}
 @media (max-width:1023px){.grid2{grid-template-columns:1fr}}
@@ -275,6 +320,7 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
     <div class="brand"><small>TOPIK · GKS · YONSEI</small><b>순공 다이어리</b></div>
     <button type="button" data-go="timer" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9.5 2.5h5"/></svg>타이머</button>
     <button type="button" data-go="log"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>기록</button>
+    <button type="button" data-go="ana"><svg viewBox="0 0 24 24"><path d="M9 4h6M9 4a1 1 0 0 0-1 1v1h8V5a1 1 0 0 0-1-1M8 6H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-2"/><path d="M8.5 13l2 2 4-4"/></svg>분석</button>
     <button type="button" data-go="score"><svg viewBox="0 0 24 24"><path d="M5 4h14v6a7 7 0 0 1-14 0zM9 21h6M12 17v4"/></svg>성적</button>
     <button type="button" data-go="set"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>설정</button>
   </nav>
@@ -377,6 +423,56 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
       </div>
     </section>
 
+    <!-- 분석 -->
+    <section class="screen" id="s-ana" hidden>
+      <div class="sh"><div><h1>모의고사 분석</h1><p>정답 수 · 틀린 문제 · 오답 원인 · 전체 통계</p></div><button class="btn" id="anaNew" type="button">+ 새 분석</button></div>
+      <section class="panel editor" id="anaEditor" hidden>
+        <div class="ed-h"><h2 id="edTitle">분석하기</h2><button class="sbtn pri" type="button" id="edClose">완료</button></div>
+        <div class="fields"><label class="field">회차 · 교재<input type="text" id="edName" list="mockNames" maxlength="40"></label><label class="field">푼 날짜<input type="date" id="edDate"></label></div>
+        <div class="seg3" id="edTabs">
+          <button type="button" data-s="listen" style="--c:var(--listen)">듣기<small id="edT-listen">—</small></button>
+          <button type="button" data-s="read" style="--c:var(--read)">읽기<small id="edT-read">—</small></button>
+          <button type="button" data-s="write" style="--c:var(--write)">쓰기<small id="edT-write">—</small></button>
+        </div>
+        <div id="edLR">
+          <div class="edsum"><b id="edScore">—</b><span>틀린 문제 번호를 누르세요 · 다시 누르면 취소</span></div>
+          <div class="qgrid" id="edGrid"></div>
+          <div class="field" id="edWrongLbl">틀린 문제 · 왜 틀렸나요?</div>
+          <div class="wrongs" id="edWrong"></div>
+          <div class="row"><button class="sbtn" type="button" id="edPerfect">틀린 문제 없음 (만점)</button><button class="sbtn" type="button" id="edClear">이 영역 비우기</button></div>
+        </div>
+        <div id="edW" hidden>
+          <div class="edsum"><b id="edWScore">—</b><span>문항별 점수를 입력하세요</span></div>
+          <div class="wfields">
+            <label class="field">51번 (10점)<input type="number" id="w51" min="0" max="10" inputmode="numeric"></label>
+            <label class="field">52번 (10점)<input type="number" id="w52" min="0" max="10" inputmode="numeric"></label>
+            <label class="field">53번 (30점)<input type="number" id="w53" min="0" max="30" inputmode="numeric"></label>
+            <label class="field">54번 (50점)<input type="number" id="w54" min="0" max="50" inputmode="numeric"></label>
+          </div>
+          <div class="field">감점 원인 (여러 개 선택)</div>
+          <div class="tagset" id="edWR"></div>
+          <div class="row"><button class="sbtn" type="button" id="edWClear">이 영역 비우기</button></div>
+        </div>
+        <div class="row"><button class="btn ghost" type="button" id="edDel">이 분석 삭제</button></div>
+      </section>
+      <div class="panel">
+        <h2>전체 통계 <small>분석한 모의고사 기준</small></h2>
+        <div class="kpis" id="anaKpis"></div>
+        <p class="advice" id="anaSummary"></p>
+      </div>
+      <div class="grid2">
+        <div class="panel trend"><h2>점수 추이 <small>영역별 100점 만점</small></h2><div id="anaTrend"></div>
+          <div class="keys"><span><i style="background:var(--listen)"></i>듣기</span><span><i style="background:var(--read)"></i>읽기</span><span><i style="background:var(--write)"></i>쓰기</span></div></div>
+        <div class="panel"><h2>오답 원인 <small>듣기 · 읽기</small></h2><div class="stat-bars" id="anaReasons"></div>
+          <div class="field" style="margin-top:6px">쓰기 감점 원인</div><div class="stat-bars" id="anaWReasons"></div></div>
+      </div>
+      <div class="grid2">
+        <div class="panel"><h2>문항 구간별 오답 <small>듣기 · 읽기 · 누적</small></h2><div id="anaRanges"></div></div>
+        <div class="panel"><h2>쓰기 문항별 평균 <small>51 · 52 · 53 · 54</small></h2><div class="stat-bars" id="anaW"></div></div>
+      </div>
+      <div class="panel"><h2>분석 목록 <small>눌러서 수정</small></h2><ul class="alist" id="anaList"></ul></div>
+    </section>
+
     <!-- 성적 -->
     <section class="screen" id="s-score" hidden>
       <div class="sh"><div><h1>성적 관리</h1><p>TOPIK II · 300점 만점</p></div></div>
@@ -472,7 +568,7 @@ const DEF={goal:270,examDate:'2026-11-15',
   course:{total:{listen:13,read:20,write:43},done:{listen:0,read:0,write:0}},
   extra:{listen:15,read:15,write:20},
   scores:{listen:86,read:76,write:61},
-  log:{},mocks:[],words:{},wordGoal:30,relisten:[],running:null,view:{listen:'c',read:'c',write:'c'},mockDraft:{name:'',part:'p1'},
+  log:{},mocks:[],results:[],words:{},wordGoal:30,relisten:[],running:null,view:{listen:'c',read:'c',write:'c'},mockDraft:{name:'',part:'p1'},
   notif:{on:true,dday:'05:50',times:DEF_TIMES.slice()}};
 const LS='sungong-state-v1',LS_TAB='sungong-tab';
 const $=id=>document.getElementById(id);
@@ -508,6 +604,7 @@ function normalize(s){
     extra:per(s.extra,DEF.extra),
     scores:sc,log,
     mocks:Array.isArray(s.mocks)?s.mocks.filter(m=>m&&m.id&&m.date).map(m=>({id:m.id,date:m.date,name:String(m.name||''),part:m.part||'all',sec:Math.max(0,+m.sec||0),score:(m.score===null||m.score===undefined||m.score==='')?null:+m.score})):[],
+    results:Array.isArray(s.results)?s.results.filter(r=>r&&r.id&&r.name).map(normRes):[],
     words:(()=>{const w={};if(s.words&&typeof s.words==='object')Object.entries(s.words).forEach(([k,v])=>{if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&+v>0)w[k]=Math.round(+v);});return w;})(),
     wordGoal:Math.max(0,num(s.wordGoal,DEF.wordGoal)),
     relisten:Array.isArray(s.relisten)?s.relisten.filter(x=>x&&x.id&&x.date&&x.name).map(x=>({id:x.id,date:x.date,name:String(x.name)})):[],
@@ -516,6 +613,12 @@ function normalize(s){
     notif:{on:n.on!==false,dday:validTime(n.dday,DEF.notif.dday),times:DEF_TIMES.map((d,i)=>validTime(times[i],d))}
   };
 }
+const W_MAX={51:10,52:10,53:30,54:50};
+const R_LR=['어휘·표현 몰라서','문법','내용 이해 부족','선택지 헷갈림','시간 부족','실수·집중력','듣기 속도·발음'];
+const R_W=['문법 오류','어휘 수준','원고지·띄어쓰기','분량 부족','구조·논리','주제 이탈','시간 부족'];
+function normRes(r){const lr=x=>{const w={};if(x&&x.wrong&&typeof x.wrong==='object')Object.entries(x.wrong).forEach(([q,v])=>{if(+q>=1&&+q<=50)w[String(+q)]=String(v||'');});return {done:!!(x&&x.done),wrong:w};};
+  const w=r.write||{};const sc={};[51,52,53,54].forEach(q=>{const v=w.s&&w.s[q];sc[q]=(v===null||v===undefined||v==='')?null:Math.max(0,Math.min(W_MAX[q],+v||0));});
+  return {id:r.id,name:String(r.name),date:/^\d{4}-\d{2}-\d{2}$/.test(r.date||'')?r.date:dk(new Date()),listen:lr(r.listen),read:lr(r.read),write:{done:!!w.done,s:sc,reasons:Array.isArray(w.reasons)?w.reasons.map(String):[]}};}
 function lsGet(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
 function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 let state=normalize(lsGet(LS));
@@ -603,7 +706,7 @@ function morningLine(n,d){const pick=a=>a[dayNum(d)%a.length];
   if(n===null||n<0)return pick(MORNING.after);if(n===0)return MORNING.day[0];if(n<=2)return pick(MORNING.last);if(n<=7)return pick(MORNING.week);return pick(MORNING.far);}
 
 /* ---------- nav ---------- */
-function show(tab){['timer','log','score','set'].forEach(t=>{$('s-'+t).hidden=t!==tab;});
+function show(tab){['timer','log','ana','score','set'].forEach(t=>{$('s-'+t).hidden=t!==tab;});
   document.querySelectorAll('.nav button').forEach(b=>{if(b.dataset.go===tab)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
   lsSet(LS_TAB,tab);window.scrollTo(0,0);}
 document.querySelector('.nav').addEventListener('click',e=>{const b=e.target.closest('button[data-go]');if(b)show(b.dataset.go);});
@@ -757,7 +860,7 @@ function build(){
     state.relisten.push({id:Date.now(),date:dk(new Date()),name});$('rlName').value='';$('rlName').blur();save();renderTasks();renderMocks();toast(name+' 듣기 다시 듣기 완료!');});
   $('wGoal').addEventListener('change',e=>{state.wordGoal=Math.max(0,Math.round(+e.target.value||0));save();renderTasks();});
   // transfer
-  $('xOut').addEventListener('click',()=>{const code='SG2:'+btoa(unescape(encodeURIComponent(JSON.stringify({log:state.log,mocks:state.mocks,course:state.course,scores:state.scores,words:state.words,relisten:state.relisten}))));
+  $('xOut').addEventListener('click',()=>{const code='SG2:'+btoa(unescape(encodeURIComponent(JSON.stringify({log:state.log,mocks:state.mocks,course:state.course,scores:state.scores,words:state.words,relisten:state.relisten,results:state.results}))));
     const ta=$('xfer');ta.value=code;ta.focus();ta.select();
     const done=()=>toast('코드를 복사했어요. 다른 기기에 붙여 넣으세요');
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done).catch(()=>{try{document.execCommand('copy');done();}catch(e){toast('코드를 길게 눌러 복사하세요');}});
@@ -769,6 +872,7 @@ function build(){
       data.mocks.forEach(m=>{if(!state.mocks.some(x=>x.id===m.id)){state.mocks.push(m);n++;}});
       SECS.forEach(s=>{state.course.done[s.k]=Math.max(state.course.done[s.k],data.course.done[s.k]);});
       Object.entries(data.words).forEach(([k,v])=>{if(v>(state.words[k]||0)){state.words[k]=v;n++;}});
+      data.results.forEach(r=>{if(!state.results.some(x=>x.id===r.id)){state.results.push(r);n++;}});
       data.relisten.forEach(r=>{if(!state.relisten.some(x=>x.id===r.id)){state.relisten.push(r);n++;}});
       save();render();$('xfer').value='';toast(n?'기록을 가져왔어요 ('+n+'개 항목 갱신)':'이미 최신 기록이에요');}
     catch(e){toast('코드가 올바르지 않아요. 다시 복사해 주세요');}});
@@ -877,9 +981,124 @@ function renderTasks(){
   const all=state.relisten.slice().sort((a,b)=>b.id-a.id);
   $('rlAllList').innerHTML=all.length?all.slice(0,40).map(r=>{const d=new Date(r.date+'T00:00:00');return `<li><span class="tag" style="color:var(--listen);border-color:color-mix(in oklab,var(--listen) 40%,transparent)">다시 듣기</span><span class="nm">${esc(r.name)}<small>${d.getMonth()+1}월 ${d.getDate()}일 · 이 회차 ${relistenCount(r.name)}번째까지 들음</small></span><span></span></li>`;}).join(''):'<li class="empty">다시 들은 모의고사 기록이 아직 없어요.</li>';
 }
+/* ---------- 모의고사 분석 ---------- */
+function resByName(name){const n=name.trim();return state.results.find(r=>r.name.trim()===n);}
+function secScore(r,k){if(k==='write'){if(!r.write.done)return null;return [51,52,53,54].reduce((a,q)=>a+(r.write.s[q]||0),0);}return r[k].done?(50-Object.keys(r[k].wrong).length)*2:null;}
+function resTotal(r){const v=SECS.map(s=>secScore(r,s.k));return v.some(x=>x===null)?null:v.reduce((a,b)=>a+b,0);}
+function resPartial(r){return SECS.reduce((a,s)=>a+(secScore(r,s.k)||0),0);}
+function partSec(part){return part==='p2'||part==='read'?'read':part==='write'?'write':'listen';}
+function anaBtn(m){const r=resByName(m.name);const t=r?resTotal(r):null;const pt=r?resPartial(r):0;
+  return `<button type="button" class="sbtn${r?'':' pri'}" data-ana="${esc(m.name)}" data-date="${m.date}" data-part="${m.part}">${r?(t!==null?t+'점':pt+'점 · 분석')+' ›':'분석하기 ›'}</button>`;}
+let ed={id:null,sec:'listen',delArm:false};
+function openEditor(name,date,sec){let r=name?resByName(name):null;
+  if(!r){r=normRes({id:Date.now(),name:name||('모의고사 '+(state.results.length+1)),date:date||dk(new Date())});state.results.push(r);save();}
+  ed={id:r.id,sec:sec||'listen',delArm:false};show('ana');renderAna();
+  setTimeout(()=>{$('anaEditor').scrollIntoView({behavior:'smooth',block:'start'});if(!name)$('edName').select();},60);}
+function curRes(){return state.results.find(r=>r.id===ed.id)||null;}
+function closeEditor(){const r=curRes();if(r&&!r.listen.done&&!r.read.done&&!r.write.done)state.results=state.results.filter(x=>x!==r);ed.id=null;save();renderAna();renderMocks();}
+function renderEditor(){
+  const box=$('anaEditor');const r=curRes();box.hidden=!r;if(!r)return;
+  $('edTitle').textContent=r.name+' 분석';setVal('edName',r.name);setVal('edDate',r.date);
+  document.querySelectorAll('#edTabs button').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.s===ed.sec?'true':'false');const sc=secScore(r,b.dataset.s);$('edT-'+b.dataset.s).textContent=sc===null?'입력 전':sc+'점';});
+  const lr=ed.sec!=='write';$('edLR').hidden=!lr;$('edW').hidden=lr;
+  const c='var(--'+ed.sec+')';$('anaEditor').style.setProperty('--c',c);
+  if(lr){const x=r[ed.sec];const wn=Object.keys(x.wrong).map(Number).sort((a,b)=>a-b);
+    $('edScore').textContent=x.done?'정답 '+(50-wn.length)+' / 50 · '+(50-wn.length)*2+'점':'아직 입력 전 · 50문항';
+    if(!$('edGrid').children.length)$('edGrid').innerHTML=Array.from({length:50},(_,i)=>`<button type="button" data-q="${i+1}">${i+1}</button>`).join('');
+    [...$('edGrid').children].forEach(b=>b.classList.toggle('x',!!x.wrong[b.dataset.q]||x.wrong[b.dataset.q]===''));
+    const reasons=R_LR.filter(t=>ed.sec==='listen'||t!=='듣기 속도·발음');
+    $('edWrongLbl').hidden=!wn.length;
+    $('edWrong').innerHTML=wn.map(q=>{const v=x.wrong[q];return `<label class="wrong"><b>${q}번</b><select data-q="${q}" class="${v?'':'unset'}"><option value="">원인 선택</option>${reasons.map(t=>`<option${t===v?' selected':''}>${t}</option>`).join('')}</select></label>`;}).join('');
+  }else{const w=r.write;[51,52,53,54].forEach(q=>setVal('w'+q,w.s[q]));
+    const sc=secScore(r,'write');$('edWScore').textContent=sc===null?'아직 입력 전 · 100점 만점':sc+' / 100점';
+    $('edWR').innerHTML=R_W.map(t=>`<button type="button" aria-pressed="${w.reasons.includes(t)}">${t}</button>`).join('');}
+  $('edDel').textContent=ed.delArm?'한 번 더 누르면 삭제돼요':'이 분석 삭제';
+}
+function renderAna(){
+  renderEditor();
+  const rs=state.results.slice().sort((a,b)=>a.date<b.date?-1:a.date>b.date?1:a.id-b.id);
+  const full=rs.filter(r=>resTotal(r)!==null);
+  const avg=k=>{const v=rs.map(r=>secScore(r,k)).filter(x=>x!==null);return v.length?v.reduce((a,b)=>a+b,0)/v.length:null;};
+  const av={};SECS.forEach(s=>av[s.k]=avg(s.k));
+  const tots=full.map(resTotal);
+  const weakK=SECS.filter(s=>av[s.k]!==null).sort((a,b)=>av[a.k]-av[b.k])[0];
+  $('anaKpis').innerHTML=`<div class="kpi"><b>${rs.length}회</b>분석한 모의고사</div>
+    <div class="kpi"><b>${tots.length?Math.round(tots.reduce((a,b)=>a+b,0)/tots.length):'—'}점</b>평균 총점</div>
+    <div class="kpi"><b>${tots.length?Math.max(...tots):'—'}점</b>최고 총점</div>
+    <div class="kpi"><b>${SECS.map(s=>av[s.k]===null?'—':Math.round(av[s.k])).join(' · ')}</b>평균 듣기 · 읽기 · 쓰기</div>`;
+  // reasons
+  const cnt={};let unset=0;rs.forEach(r=>['listen','read'].forEach(k=>{if(!r[k].done)return;Object.values(r[k].wrong).forEach(v=>{if(v)cnt[v]=(cnt[v]||0)+1;else unset++;});}));
+  const arr=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);if(unset)arr.push(['원인 미입력',unset]);
+  const tw=arr.reduce((a,b)=>a+b[1],0);
+  $('anaReasons').innerHTML=arr.length?arr.map(([t,n])=>`<div class="sb"><span class="lb">${esc(t)}</span><span class="t"><i style="width:${n/arr[0][1]*100}%;${t==='원인 미입력'?'background:var(--line)':''}"></i></span><span>${n}개 · ${Math.round(n/tw*100)}%</span></div>`).join(''):'<p class="empty-note">틀린 문제에 원인을 고르면 여기에 모여요.</p>';
+  const wc={};rs.forEach(r=>{if(r.write.done)r.write.reasons.forEach(t=>wc[t]=(wc[t]||0)+1);});
+  const wa=Object.entries(wc).sort((a,b)=>b[1]-a[1]);
+  $('anaWReasons').innerHTML=wa.length?wa.map(([t,n])=>`<div class="sb"><span class="lb">${esc(t)}</span><span class="t"><i style="width:${n/wa[0][1]*100}%"></i></span><span>${n}회</span></div>`).join(''):'<p class="empty-note">쓰기 감점 원인을 고르면 여기에 모여요.</p>';
+  // ranges
+  const rng=k=>{const b=[0,0,0,0,0];let m=0;rs.forEach(r=>{if(!r[k].done)return;m++;Object.keys(r[k].wrong).forEach(q=>b[Math.min(4,Math.floor((+q-1)/10))]++);});return {b,m};};
+  $('anaRanges').innerHTML=['listen','read'].map(k=>{const {b,m}=rng(k);const mx=Math.max(1,...b);const s=SECS.find(x=>x.k===k);
+    return `<div class="field" style="--c:var(--${k});margin-top:4px"><b style="color:var(--c)">${s.ko}</b> ${m?m+'회 분석 · 구간별 틀린 문제 수':'아직 분석 없음'}</div>
+    <div class="rng" style="--c:var(--${k})">${b.map((n,i)=>`<div><b>${n}</b><i style="height:${m?n/mx*80:0}%"></i>${i*10+1}–${i*10+10}</div>`).join('')}</div>`;}).join('');
+  // write per question
+  const wq=[51,52,53,54].map(q=>{const v=rs.filter(r=>r.write.done&&r.write.s[q]!==null).map(r=>r.write.s[q]);return {q,a:v.length?v.reduce((x,y)=>x+y,0)/v.length:null};});
+  $('anaW').innerHTML=wq.map(x=>`<div class="sb" style="--c:var(--write)"><span class="lb">${x.q}번 (${W_MAX[x.q]}점)</span><span class="t"><i style="width:${x.a===null?0:x.a/W_MAX[x.q]*100}%"></i></span><span>${x.a===null?'—':(Math.round(x.a*10)/10)+'점'}</span></div>`).join('');
+  // trend
+  trend(rs);
+  // summary
+  const parts=[];
+  if(!rs.length)parts.push('아직 분석한 모의고사가 없어요. 모의고사를 끝낸 뒤 <b>분석하기</b>를 누르거나 <b>+ 새 분석</b>으로 시작하세요.');
+  else{
+    if(tots.length){const last=tots[tots.length-1];parts.push('최근 총점 <b>'+last+'점</b>'+(last>=230?' · 6급 범위예요!':' · 6급까지 <b>'+(230-last)+'점</b>'));}
+    if(weakK)parts.push('가장 약한 영역은 <b>'+weakK.ko+' (평균 '+Math.round(av[weakK.k])+'점)</b>');
+    if(arr.length&&arr[0][0]!=='원인 미입력')parts.push('가장 많은 오답 원인은 <b>'+esc(arr[0][0])+' ('+arr[0][1]+'개)</b>');
+    const lr=['listen','read'].map(k=>{const {b,m}=rng(k);if(!m)return null;const i=b.indexOf(Math.max(...b));return Math.max(...b)?SECS.find(x=>x.k===k).ko+' '+(i*10+1)+'–'+(i*10+10)+'번':null;}).filter(Boolean);
+    if(lr.length)parts.push('많이 틀리는 구간은 <b>'+lr.join(', ')+'</b>');
+    if(wa.length)parts.push('쓰기는 <b>'+esc(wa[0][0])+'</b>에서 자주 감점돼요');
+  }
+  $('anaSummary').innerHTML=parts.join(' · ')+(rs.length?'.':'');
+  // list
+  const list=rs.slice().reverse();
+  $('anaList').innerHTML=list.length?list.map(r=>{const d=new Date(r.date+'T00:00:00');const t=resTotal(r);const lv=t!==null?(LEVELS.find(([v])=>t>=v)||[0,'등급 외'])[1]:null;
+    return `<li><div class="nm"><b>${esc(r.name)}</b><small>${d.getMonth()+1}월 ${d.getDate()}일 · ${t!==null?'총점 '+t+'점 · '+lv:'일부 영역만 입력됨'}</small>
+      <div class="sc3">${SECS.map(s=>{const v=secScore(r,s.k);return `<span style="--c:var(--${s.k})">${s.ko} ${v===null?'—':v}</span>`;}).join('')}</div></div>
+      <button type="button" class="sbtn" data-open="${r.id}">수정 ›</button></li>`;}).join(''):'<li class="empty">분석 기록이 아직 없어요.</li>';
+}
+function trend(rs){
+  const W=360,H=180,L=30,R=10,T=12,B=26;const pw=W-L-R,ph=H-T-B;const y=v=>T+ph-(v/100)*ph;
+  const pts=rs.filter(r=>SECS.some(s=>secScore(r,s.k)!==null));
+  if(!pts.length){$('anaTrend').innerHTML='<p class="empty-note">모의고사를 분석하면 점수 변화가 여기에 그려져요.</p>';return;}
+  const x=i=>pts.length===1?L+pw/2:L+i*(pw/(pts.length-1));
+  let g='';[0,50,70,100].forEach(v=>{g+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" ${v===70?'stroke-dasharray="3 3"':''}/><text x="${L-5}" y="${y(v)+3.5}" text-anchor="end">${v}</text>`;});
+  SECS.forEach(s=>{const ps=pts.map((r,i)=>[x(i),secScore(r,s.k)]).filter(p=>p[1]!==null);
+    if(ps.length>1)g+=`<polyline fill="none" stroke="var(--${s.k})" stroke-width="2" stroke-linejoin="round" points="${ps.map(p=>p[0]+','+y(p[1])).join(' ')}"/>`;
+    ps.forEach(p=>{g+=`<circle cx="${p[0]}" cy="${y(p[1])}" r="3.5" fill="var(--${s.k})"/>`;});});
+  const step=Math.ceil(pts.length/6);pts.forEach((r,i)=>{if(i%step&&i!==pts.length-1)return;const d=new Date(r.date+'T00:00:00');g+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle">${d.getMonth()+1}/${d.getDate()}</text>`;});
+  $('anaTrend').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="모의고사 영역별 점수 추이">${g}</svg>`;
+}
+function bindAna(){
+  $('anaNew').addEventListener('click',()=>openEditor('',dk(new Date()),'listen'));
+  $('edClose').addEventListener('click',closeEditor);
+  $('edTabs').addEventListener('click',e=>{const b=e.target.closest('button[data-s]');if(!b)return;ed.sec=b.dataset.s;ed.delArm=false;renderEditor();});
+  $('edName').addEventListener('change',e=>{const r=curRes();const v=e.target.value.trim();if(r&&v){r.name=v;save();renderAna();renderMocks();renderTasks();}});
+  $('edDate').addEventListener('change',e=>{const r=curRes();if(r&&e.target.value){r.date=e.target.value;save();renderAna();}});
+  $('edGrid').addEventListener('click',e=>{const b=e.target.closest('button[data-q]');const r=curRes();if(!b||!r)return;const x=r[ed.sec];const q=b.dataset.q;
+    if(q in x.wrong)delete x.wrong[q];else x.wrong[q]='';x.done=true;save();renderAna();renderMocks();});
+  $('edWrong').addEventListener('change',e=>{const sel=e.target.closest('select[data-q]');const r=curRes();if(!sel||!r)return;r[ed.sec].wrong[sel.dataset.q]=sel.value;save();renderAna();});
+  $('edPerfect').addEventListener('click',()=>{const r=curRes();if(!r)return;r[ed.sec]={done:true,wrong:{}};save();renderAna();renderMocks();toast('만점! 대단해요');});
+  $('edClear').addEventListener('click',()=>{const r=curRes();if(!r)return;r[ed.sec]={done:false,wrong:{}};save();renderAna();renderMocks();});
+  [51,52,53,54].forEach(q=>$('w'+q).addEventListener('change',e=>{const r=curRes();if(!r)return;const v=e.target.value;
+    r.write.s[q]=v===''?null:Math.max(0,Math.min(W_MAX[q],Math.round(+v)));r.write.done=[51,52,53,54].some(k=>r.write.s[k]!==null);save();renderAna();renderMocks();}));
+  $('edWR').addEventListener('click',e=>{const b=e.target.closest('button');const r=curRes();if(!b||!r)return;const t=b.textContent;
+    r.write.reasons=r.write.reasons.includes(t)?r.write.reasons.filter(x=>x!==t):r.write.reasons.concat(t);save();renderAna();});
+  $('edWClear').addEventListener('click',()=>{const r=curRes();if(!r)return;r.write={done:false,s:{51:null,52:null,53:null,54:null},reasons:[]};save();renderAna();renderMocks();});
+  $('edDel').addEventListener('click',()=>{if(!ed.delArm){ed.delArm=true;renderEditor();setTimeout(()=>{ed.delArm=false;renderEditor();},4000);return;}
+    state.results=state.results.filter(r=>r.id!==ed.id);ed.id=null;save();renderAna();renderMocks();toast('분석을 삭제했어요');});
+  $('anaList').addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(!b)return;const r=state.results.find(x=>String(x.id)===b.dataset.open);if(r){ed={id:r.id,sec:'listen',delArm:false};renderAna();$('anaEditor').scrollIntoView({behavior:'smooth',block:'start'});}});
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-ana]');if(!b)return;openEditor(b.dataset.ana,b.dataset.date,partSec(b.dataset.part));});
+}
 function partName(k){const p=MOCK_PARTS.find(x=>x.k===k);return p?p.ko.replace(/ \(.+\)/,''):k}
 function mockItem(m,showDate){const d=new Date(m.date+'T00:00:00');
-  return `<li><span class="tag">${esc(partName(m.part))}</span><span class="nm">${esc(m.name)}<small>${showDate?(d.getMonth()+1)+'월 '+d.getDate()+'일 · ':''}${kmin(m.sec)}${LISTEN_PARTS.includes(m.part)?' · 듣기 다시 듣기 '+relistenCount(m.name)+'회':''}</small></span><label>점수<input type="number" inputmode="numeric" min="0" max="300" data-id="${m.id}" value="${m.score===null?'':m.score}"></label></li>`;}
+  return `<li><span class="tag">${esc(partName(m.part))}</span><span class="nm">${esc(m.name)}<small>${showDate?(d.getMonth()+1)+'월 '+d.getDate()+'일 · ':''}${kmin(m.sec)}${LISTEN_PARTS.includes(m.part)?' · 듣기 다시 듣기 '+relistenCount(m.name)+'회':''}</small></span>${anaBtn(m)}</li>`;}
 function renderMocks(){
   const key=dk(new Date());const today=state.mocks.filter(m=>m.date===key).sort((a,b)=>b.id-a.id);
   $('mTodayList').innerHTML=today.length?today.map(m=>mockItem(m,false)).join(''):'<li class="empty">아직 없어요. 회차와 영역을 고르고 시작을 누르면 실제 시험 시간으로 카운트다운해요.</li>';
@@ -927,7 +1146,7 @@ function render(){
   $('secsum').innerHTML=ORDER.map(k=>{const s=SECS.find(x=>x.k===k);const tot=courseTotal(k),done=Math.min(tot,courseDoneAll(k));
     return `<div class="ss" style="--c:var(--${k})"><b>${s.ko}</b><div class="r"><div class="track"><div style="width:${tot?done/tot*100:100}%"></div></div><span>기본 ${kmin(done)} / ${state.course.total[k]}시간 · 추가 ${kmin(sumAll('x_'+k))}</span></div></div>`;}).join('');
   setVal('wGoal',state.wordGoal);
-  bars(today);scores();renderMocks();renderTasks();live();renderNotif();
+  bars(today);scores();renderMocks();renderTasks();renderAna();live();renderNotif();
 }
 
 function bars(today){
@@ -963,8 +1182,8 @@ $('motto').addEventListener('click',nextMotto);
 setInterval(nextMotto,15000);
 
 /* ---------- start ---------- */
-build();
-const savedTab=lsGet(LS_TAB);show(['timer','log','score','set'].includes(savedTab)?savedTab:'timer');
+build();bindAna();
+const savedTab=lsGet(LS_TAB);show(['timer','log','ana','score','set'].includes(savedTab)?savedTab:'timer');
 save();render();
 setInterval(live,500);
 let lastKey=dk(new Date());
