@@ -944,7 +944,7 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
 <div class="focus" id="focus" hidden>
   <div class="fv"><div class="amb" id="fvAmb"></div><div id="fvFrame"></div></div>
   <div class="fshade"></div>
-  <div class="fhint" id="fHint">영상이 멈춰 있으면 화면 가운데를 한 번 누르세요</div>
+  <div class="fhint" id="fHint">타이머가 멈추면 영상도 멈추고, 다시 시작하면 멈춘 곳부터 이어서 재생돼요</div>
   <div class="ftop"><div style="min-width:0"><span class="fchip" id="fName">—</span><div class="fsrc" id="fSrc"></div></div><div class="fbtns"><button type="button" class="gbtn" id="fNext">다른 영상</button><button type="button" class="gbtn" id="fClose">닫기</button></div></div>
   <div class="fbot">
     <small id="fLbl">—</small>
@@ -1029,7 +1029,8 @@ function normalize(s){
     scores:sc,log,
     mocks:Array.isArray(s.mocks)?s.mocks.filter(m=>m&&m.id&&m.date).map(m=>({id:m.id,date:m.date,name:String(m.name||''),part:m.part||'all',sec:Math.max(0,+m.sec||0),splits:Array.isArray(m.splits)?m.splits.map(Number):[],score:(m.score===null||m.score===undefined||m.score==='')?null:+m.score})):[],
     lofi:(()=>{const l=s.lofi||{};const list=Array.isArray(l.list)?l.list.filter(v=>v&&/^[\w-]{11}$/.test(v.id)).map(v=>({id:v.id,name:String(v.name||v.id)})):[];
-      return {src:['yt','rain','brown','wave','none'].includes(l.src)?l.src:'yt',auto:l.auto!==false,rotate:[0,15,30,60].includes(+l.rotate)?+l.rotate:30,list:list.length?list:LOFI_DEF.map(v=>({...v})),idx:Math.max(0,+l.idx||0)};})(),
+      const up=(+l.v||1)<2;const pos={};if(l.pos&&typeof l.pos==='object')Object.entries(l.pos).forEach(([k,v])=>{if(+v>0)pos[k]=+v;});
+      return {v:2,pos,src:['yt','rain','brown','wave','none'].includes(l.src)?l.src:'yt',auto:l.auto!==false,rotate:up?0:([0,15,30,60].includes(+l.rotate)?+l.rotate:0),list:(up||!list.length)?LOFI_DEF.map(v=>({...v})):list,idx:up?0:Math.max(0,+l.idx||0)};})(),
     focus:{on:!(s.focus&&s.focus.on===false),since:(s.focus&&s.focus.since)||dk(new Date())},
     away:(s.away&&+s.away.t&&s.away.f)?{t:+s.away.t,f:s.away.f}:null,
     distract:(s.distract&&typeof s.distract==='object')?Object.assign({},s.distract):{},
@@ -1059,7 +1060,7 @@ function normalize(s){
 }
 const WEEK_DEF=[120,120,120,120,120,90,300];
 const GKS_DEF=['전공 정하기 (연세대 경영학 · HR 세부 전공 확인)','희망 지도교수 · 연구 분야 조사','학업계획서 초안 쓰기','학업계획서 첨삭 · 완성','자기소개서 쓰기','추천서 2부 부탁하기','졸업(예정) · 성적 증명서 준비 (아포스티유)','TOPIK 성적표 출력','IELTS 응시 · 성적표 받기','대사관 트랙 서류 제출 (2월)'];
-const LOFI_DEF=[{id:'jfKfPfyJRdk',name:'Lofi Girl · lofi hip hop radio (공부)'},{id:'4xDzrJKXOOY',name:'Lofi Girl · synthwave radio (집중)'},{id:'rUxyKA_-grg',name:'Lofi Girl · sleep/chill radio (차분하게)'}];
+const LOFI_DEF=[{id:'lTRiuFIWV54',name:'Lofi Girl · 1번'},{id:'53gNFOqDFcE',name:'Lofi Girl · 2번'},{id:'W6ZxmajIt8M',name:'Lofi Girl · 3번'},{id:'W5FI97ovWog',name:'Lofi Girl · 4번'},{id:'5jZvtNHLJZc',name:'Lofi Girl · 5번'},{id:'BTYAsjAVa3I',name:'Lofi Girl · 6번'},{id:'FxsevJUKcDU',name:'Lofi Girl · 7번'},{id:'-PKH4bsjlm0',name:'Lofi Girl · 8번'},{id:'wAPCSnAhhC8',name:'Lofi Girl · 9번'},{id:'TURbeWK2wwg',name:'Lofi Girl · 10번'},{id:'l98w9OSKVNA',name:'Lofi Girl · 11번'},{id:'Z_8f5IWuTFg',name:'Lofi Girl · 12번'}];
 const W_MAX={51:10,52:10,53:30,54:50};
 const R_LR=['어휘·표현 몰라서','문법','내용 이해 부족','선택지 헷갈림','시간 부족','실수·집중력','듣기 속도·발음'];
 const R_W=['문법 오류','어휘 수준','원고지·띄어쓰기','분량 부족','구조·논리','주제 이탈','시간 부족'];
@@ -1654,7 +1655,16 @@ function loadYTApi(){if(window.YT&&window.YT.Player)return Promise.resolve(true)
     const prev=window.onYouTubeIframeAPIReady;window.onYouTubeIframeAPIReady=()=>{try{prev&&prev();}catch(e){}fin(true);};
     if(!document.getElementById('ytapi')){const sc=document.createElement('script');sc.id='ytapi';sc.src='https://www.youtube.com/iframe_api';sc.onerror=()=>fin(false);document.head.appendChild(sc);}
     const t=setInterval(()=>{if(window.YT&&window.YT.Player){clearInterval(t);fin(true);}},300);setTimeout(()=>{clearInterval(t);fin(!!(window.YT&&window.YT.Player));},9000);});}
-function destroyYT(){try{if(ytP&&ytP.destroy)ytP.destroy();}catch(e){}ytP=null;$('fvFrame').innerHTML='';}
+function wantPlay(){const r=state.running;return !!(r&&r.f!=='mock');}
+let lastWant=null,posAt=0;
+function savePos(){try{const v=curVid();if(ytP&&ytP.getCurrentTime&&v){const t=Math.floor(ytP.getCurrentTime()||0);if(t>0){state.lofi.pos[v.id]=t;save();}}}catch(e){}}
+function syncMedia(){if(!focusOpen)return;const w=wantPlay();
+  if(state.lofi.src==='yt'){if(ytP&&ytP.getPlayerState){
+      if(w!==lastWant){try{if(w)ytP.playVideo();else{ytP.pauseVideo();savePos();}}catch(e){}}
+      if(w&&Date.now()-posAt>10000){posAt=Date.now();savePos();}}}
+  else if(state.lofi.src!=='none'){if(w&&!amb)startAmb(state.lofi.src);if(!w&&amb)stopAmb();}
+  lastWant=w;}
+function destroyYT(){savePos();try{if(ytP&&ytP.destroy)ytP.destroy();}catch(e){}ytP=null;$('fvFrame').innerHTML='';}
 function noiseBuf(type){const sr=actx.sampleRate,len=sr*6;const b=actx.createBuffer(2,len,sr);
   for(let ch=0;ch<2;ch++){const d=b.getChannelData(ch);let last=0,b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
     for(let i=0;i<len;i++){const w=Math.random()*2-1;
@@ -1678,17 +1688,17 @@ function stopAmb(){if(!amb)return;const a=amb;amb=null;try{a.g.gain.cancelSchedu
 function renderSrc(){$('fSrc').innerHTML=SRC_LIST.map(([k,t])=>`<button type="button" data-src="${k}" aria-pressed="${state.lofi.src===k}">${t}</button>`).join('');
   $('fNext').hidden=state.lofi.src!=='yt';$('fvAmb').hidden=false;}
 async function loadVid(){const src=state.lofi.src;vidAt=Date.now();renderSrc();
-  if(src!=='yt'){destroyYT();stopAmb();$('fName').textContent=AMB_NAMES[src];$('fHint').hidden=true;startAmb(src);return;}
+  if(src!=='yt'){destroyYT();stopAmb();$('fName').textContent=AMB_NAMES[src]+(wantPlay()||src==='none'?'':' · 타이머를 시작하면 재생돼요');$('fHint').hidden=true;if(wantPlay())startAmb(src);lastWant=wantPlay();return;}
   stopAmb();const v=curVid();if(!v){destroyYT();$('fName').textContent='재생 목록이 비어 있어요 · 설정에서 유튜브 링크를 추가하세요';return;}
   $('fName').textContent=v.name+' · 불러오는 중…';
   const ok=await loadYTApi();if(!focusOpen||state.lofi.src!=='yt')return;
   if(!ok){$('fName').textContent='인터넷이 연결되지 않아 빗소리로 재생해요';startAmb('rain');return;}
-  const pv={autoplay:1,playsinline:1,rel:0,modestbranding:1,controls:1};if(/^https?:/.test(location.origin))pv.origin=location.origin;
-  if(ytP&&ytP.loadVideoById){try{ytP.loadVideoById(v.id);}catch(e){}}
+  const w0=wantPlay();const st0=Math.floor(state.lofi.pos[v.id]||0);const pv={autoplay:w0?1:0,start:st0,playsinline:1,rel:0,modestbranding:1,controls:1};lastWant=w0;if(/^https?:/.test(location.origin))pv.origin=location.origin;
+  if(ytP&&ytP.loadVideoById){try{if(w0)ytP.loadVideoById({videoId:v.id,startSeconds:st0});else ytP.cueVideoById({videoId:v.id,startSeconds:st0});}catch(e){}}
   else{$('fvFrame').innerHTML='<div id="ytHost"></div>';
     ytP=new YT.Player('ytHost',{videoId:v.id,host:'https://www.youtube-nocookie.com',playerVars:pv,events:{
-      onReady:e=>{try{e.target.playVideo();}catch(x){}},
-      onStateChange:e=>{if(e.data===1){ytFails=0;const c=curVid();if(c)$('fName').textContent=c.name;$('fHint').hidden=true;}},
+      onReady:e=>{try{if(wantPlay())e.target.playVideo();}catch(x){}},
+      onStateChange:e=>{if(e.data===0){const c=curVid();if(c){delete state.lofi.pos[c.id];save();}nextVid();return;}if(e.data===1){ytFails=0;const c=curVid();if(c)$('fName').textContent=c.name;$('fHint').hidden=true;}},
       onError:()=>{ytFails++;const L=state.lofi.list;
         if(ytFails<L.length){toast('이 영상은 앱에서 재생할 수 없어서 다음 영상으로 넘어가요');state.lofi.idx=(state.lofi.idx+1)%L.length;save();renderLofi();loadVid();}
         else{ytFails=0;destroyYT();$('fName').textContent='재생 가능한 영상이 없어 빗소리로 바꿨어요';startAmb('rain');}}}});}
@@ -1697,8 +1707,8 @@ function openFocus(){if(focusOpen)return;focusOpen=true;$('focus').hidden=false;
   try{history.pushState({focus:1},'');}catch(e){}lockScreen(true);liveFocus();}
 function closeFocus(fromPop){if(!focusOpen)return;focusOpen=false;$('focus').hidden=true;destroyYT();stopAmb();
   if(!fromPop){try{if(history.state&&history.state.focus)history.back();}catch(e){}}if(!state.running)lockScreen(false);}
-function nextVid(){const L=state.lofi.list;if(!L.length)return;state.lofi.idx=(state.lofi.idx+1)%L.length;ytFails=0;save();loadVid();renderLofi();}
-function liveFocus(){if(!focusOpen)return;const r=state.running;const key=dk(new Date());
+function nextVid(){const L=state.lofi.list;if(!L.length)return;savePos();state.lofi.idx=(state.lofi.idx+1)%L.length;ytFails=0;save();loadVid();renderLofi();}
+function liveFocus(){if(!focusOpen)return;syncMedia();const r=state.running;const key=dk(new Date());
   if(state.lofi.src==='yt'&&state.lofi.rotate&&Date.now()-vidAt>state.lofi.rotate*60000)nextVid();
   const pr=state.pomoRun;
   if(!r&&pr){const rem=(pr.until-Date.now())/1000;$('fLbl').textContent=(pr.long?'긴 휴식':'휴식')+' 중 · 스트레칭하고 물 한 잔!';$('fClock').textContent=clock(Math.max(0,rem)).replace(/^00:/,'');$('fSub').textContent='오늘 포모도로 '+(state.pomoDay[key]||0)+'회 완료 · 오늘 순공 '+kmin(dayTotal(key));$('fGo').textContent='지금 다시 시작';return;}
