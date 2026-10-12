@@ -173,6 +173,29 @@ button,input,select,textarea{font:inherit;color:inherit}
 .mlist input{width:56px;padding:5px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-variant-numeric:tabular-nums;text-align:right}
 .mlist .empty{border-style:dashed;color:var(--muted);display:block}
 
+/* lofi focus mode */
+.focus{position:fixed;inset:0;z-index:50;background:#05070d;color:#fff;overflow:hidden}
+.fv{position:absolute;inset:0;overflow:hidden}
+.fv iframe{position:absolute;top:50%;left:50%;width:max(100vw,177.78vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%);border:0}
+.fshade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent 22%,transparent 50%,rgba(0,0,0,.78))}
+.ftop{position:absolute;top:0;left:0;right:0;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 0;display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.fchip{font-size:12px;font-weight:600;padding:6px 12px;border-radius:99px;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);max-width:55vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fbtns{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.gbtn{border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);backdrop-filter:blur(8px);color:#fff;border-radius:99px;padding:7px 14px;font-size:13px;font-weight:600;cursor:pointer}
+.gbtn.solid{background:#fff;color:#0b1120;border-color:#fff}
+.fbot{position:absolute;left:0;right:0;bottom:0;padding:0 20px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;pointer-events:none}
+.fbot>*{pointer-events:auto}
+.fbot small{font-size:13px;letter-spacing:.08em;opacity:.85;font-weight:600}
+.fbot b{font-weight:200;font-size:clamp(56px,13vw,104px);line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 2px 24px rgba(0,0,0,.5)}
+.fbot span{font-size:13px;opacity:.8}
+.fbot .fctl{display:flex;gap:8px;margin:10px 0 6px}
+.fbot p{margin:0;font-family:var(--f-serif);font-weight:700;font-size:16px;max-width:560px;opacity:.92;text-shadow:0 1px 10px rgba(0,0,0,.6)}
+.fhint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:12px;opacity:.55;pointer-events:none;text-align:center}
+.vlist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.vlist li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13.5px}
+.vlist li.cur{border-color:var(--navy)}
+.vlist span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 /* analysis */
 .ed-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .editor{border-color:var(--navy);box-shadow:0 0 0 3px color-mix(in oklab,var(--navy) 15%,transparent)}
@@ -328,7 +351,7 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
   <main>
     <!-- 타이머 -->
     <section class="screen" id="s-timer">
-      <div class="sh"><div><h1>오늘의 순공</h1><p id="todayLabel">—</p></div><span class="pill" id="notifPill">알림 확인 중…</span></div>
+      <div class="sh"><div><h1>오늘의 순공</h1><p id="todayLabel">—</p></div><div class="row" style="gap:8px;align-items:center"><span class="pill" id="notifPill">알림 확인 중…</span><button type="button" class="sbtn pri" id="lofiOpen">로파이 공부 모드</button></div></div>
       <div class="hero">
         <div class="id">
           <div class="road"><span class="on">TOPIK 6급</span><i>→</i><span>IELTS 6.0</span><i>→</i><span>GKS 합격</span><i>→</i><span>연세대 경영학 석사</span></div>
@@ -519,6 +542,17 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
         </div>
       </div>
       <div class="panel">
+        <h2>로파이 공부 모드 <small>Lofi Girl · YouTube</small></h2>
+        <label class="switch">타이머를 시작하면 자동으로 열기<input type="checkbox" id="lfAuto"></label>
+        <div class="fields">
+          <label class="field">영상 자동으로 바꾸기<select id="lfRot"><option value="0">바꾸지 않기</option><option value="15">15분마다</option><option value="30">30분마다</option><option value="60">1시간마다</option></select></label>
+        </div>
+        <div class="field">재생 목록</div>
+        <ul class="vlist" id="lfList"></ul>
+        <form class="row" id="lfForm"><label class="field">유튜브 링크 추가<input type="text" id="lfUrl" placeholder="https://youtube.com/watch?v=…"></label><button class="btn" type="submit">추가</button></form>
+        <p class="hint">공부할 때 듣고 싶은 다른 유튜브 영상도 링크를 붙여 넣어 추가할 수 있어요. 인터넷이 연결되어 있어야 재생돼요.</p>
+      </div>
+      <div class="panel">
         <h2>알림 <small>Notifications</small></h2>
         <label class="switch">매일 D-day와 응원 메시지 받기<input type="checkbox" id="nOn"></label>
         <div class="status" id="nStatus">—</div>
@@ -541,6 +575,19 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
       </div>
     </section>
   </main>
+</div>
+<div class="focus" id="focus" hidden>
+  <div class="fv"><iframe id="fvFrame" title="공부 음악 영상" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  <div class="fshade"></div>
+  <div class="fhint" id="fHint">영상이 멈춰 있으면 화면 가운데를 한 번 누르세요</div>
+  <div class="ftop"><span class="fchip" id="fName">—</span><div class="fbtns"><button type="button" class="gbtn" id="fNext">다른 영상</button><button type="button" class="gbtn" id="fClose">닫기</button></div></div>
+  <div class="fbot">
+    <small id="fLbl">—</small>
+    <b id="fClock">00:00:00</b>
+    <span id="fSub">—</span>
+    <div class="fctl"><button type="button" class="gbtn solid" id="fGo">일시정지</button></div>
+    <p id="fMotto"></p>
+  </div>
 </div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -568,7 +615,7 @@ const DEF={goal:270,examDate:'2026-11-15',
   course:{total:{listen:13,read:20,write:43},done:{listen:0,read:0,write:0}},
   extra:{listen:15,read:15,write:20},
   scores:{listen:86,read:76,write:61},
-  log:{},mocks:[],results:[],words:{},wordGoal:30,relisten:[],running:null,view:{listen:'c',read:'c',write:'c'},mockDraft:{name:'',part:'p1'},
+  log:{},mocks:[],results:[],lofi:null,words:{},wordGoal:30,relisten:[],running:null,view:{listen:'c',read:'c',write:'c'},mockDraft:{name:'',part:'p1'},
   notif:{on:true,dday:'05:50',times:DEF_TIMES.slice()}};
 const LS='sungong-state-v1',LS_TAB='sungong-tab';
 const $=id=>document.getElementById(id);
@@ -604,6 +651,8 @@ function normalize(s){
     extra:per(s.extra,DEF.extra),
     scores:sc,log,
     mocks:Array.isArray(s.mocks)?s.mocks.filter(m=>m&&m.id&&m.date).map(m=>({id:m.id,date:m.date,name:String(m.name||''),part:m.part||'all',sec:Math.max(0,+m.sec||0),score:(m.score===null||m.score===undefined||m.score==='')?null:+m.score})):[],
+    lofi:(()=>{const l=s.lofi||{};const list=Array.isArray(l.list)?l.list.filter(v=>v&&/^[\w-]{11}$/.test(v.id)).map(v=>({id:v.id,name:String(v.name||v.id)})):[];
+      return {auto:l.auto!==false,rotate:[0,15,30,60].includes(+l.rotate)?+l.rotate:30,list:list.length?list:LOFI_DEF.map(v=>({...v})),idx:Math.max(0,+l.idx||0)};})(),
     results:Array.isArray(s.results)?s.results.filter(r=>r&&r.id&&r.name).map(normRes):[],
     words:(()=>{const w={};if(s.words&&typeof s.words==='object')Object.entries(s.words).forEach(([k,v])=>{if(/^\d{4}-\d{2}-\d{2}$/.test(k)&&+v>0)w[k]=Math.round(+v);});return w;})(),
     wordGoal:Math.max(0,num(s.wordGoal,DEF.wordGoal)),
@@ -613,6 +662,7 @@ function normalize(s){
     notif:{on:n.on!==false,dday:validTime(n.dday,DEF.notif.dday),times:DEF_TIMES.map((d,i)=>validTime(times[i],d))}
   };
 }
+const LOFI_DEF=[{id:'jfKfPfyJRdk',name:'Lofi Girl · lofi hip hop radio (공부)'},{id:'4xDzrJKXOOY',name:'Lofi Girl · synthwave radio (집중)'},{id:'rUxyKA_-grg',name:'Lofi Girl · sleep/chill radio (차분하게)'}];
 const W_MAX={51:10,52:10,53:30,54:50};
 const R_LR=['어휘·표현 몰라서','문법','내용 이해 부족','선택지 헷갈림','시간 부족','실수·집중력','듣기 속도·발음'];
 const R_W=['문법 오류','어휘 수준','원고지·띄어쓰기','분량 부족','구조·논리','주제 이탈','시간 부족'];
@@ -887,8 +937,8 @@ function toggle(f){
   audioOn();const prev=state.running;
   if(prev&&prev.f===f){stopRunning();lockScreen(false);}
   else{if(prev){const was=stopRunning();if(was.f==='mock')toast('모의고사 기록을 저장했어요');}
-    state.running={f,start:Date.now()};const [m,k]=f.split('_');state.view[k]=m;lockScreen(true);}
-  save();render();timerNotify();
+    state.running={f,start:Date.now()};const [m,k]=f.split('_');state.view[k]=m;lockScreen(true);if(state.lofi.auto)openFocus();}
+  lastF=f;save();render();timerNotify();
 }
 function startMock(){audioOn();if(state.running)stopRunning();
   state.mockDraft.name=$('mName').value.trim();state.mockDraft.part=$('mPart').value;
@@ -933,6 +983,7 @@ function live(){
   $('mName').disabled=mOn;$('mPart').disabled=mOn;
   if(mOn&&prevRem.mock>0&&mrem<=0&&!document.hidden){chime();toast('모의고사 시간 종료!');}
   prevRem.mock=mrem;
+  liveFocus();
   // hero
   const tot=dayTotal(key);const ts=dayTargetAll();
   $('todayTotal').textContent=hms(tot);
@@ -981,6 +1032,45 @@ function renderTasks(){
   const all=state.relisten.slice().sort((a,b)=>b.id-a.id);
   $('rlAllList').innerHTML=all.length?all.slice(0,40).map(r=>{const d=new Date(r.date+'T00:00:00');return `<li><span class="tag" style="color:var(--listen);border-color:color-mix(in oklab,var(--listen) 40%,transparent)">다시 듣기</span><span class="nm">${esc(r.name)}<small>${d.getMonth()+1}월 ${d.getDate()}일 · 이 회차 ${relistenCount(r.name)}번째까지 들음</small></span><span></span></li>`;}).join(''):'<li class="empty">다시 들은 모의고사 기록이 아직 없어요.</li>';
 }
+/* ---------- 로파이 공부 모드 ---------- */
+let focusOpen=false,vidAt=0,lastF=null;
+function ytId(u){u=String(u||'').trim();if(/^[\w-]{11}$/.test(u))return u;const m=u.match(/(?:v=|youtu\.be\/|\/live\/|\/embed\/|\/shorts\/)([\w-]{11})/);return m?m[1]:null;}
+function curVid(){const L=state.lofi.list;return L.length?L[state.lofi.idx%L.length]:null;}
+function loadVid(){const v=curVid();const f=$('fvFrame');vidAt=Date.now();
+  if(!v){f.src='about:blank';$('fName').textContent='재생 목록이 비어 있어요';return;}
+  f.src='https://www.youtube-nocookie.com/embed/'+v.id+'?autoplay=1&playsinline=1&rel=0&modestbranding=1&controls=1';
+  $('fName').textContent=v.name;$('fHint').hidden=false;setTimeout(()=>{$('fHint').hidden=true;},6000);}
+function openFocus(){if(focusOpen)return;focusOpen=true;$('focus').hidden=false;loadVid();$('fMotto').textContent=MOTTOS[mi];
+  try{history.pushState({focus:1},'');}catch(e){}lockScreen(true);liveFocus();}
+function closeFocus(fromPop){if(!focusOpen)return;focusOpen=false;$('focus').hidden=true;$('fvFrame').src='about:blank';
+  if(!fromPop){try{if(history.state&&history.state.focus)history.back();}catch(e){}}if(!state.running)lockScreen(false);}
+function nextVid(){const L=state.lofi.list;if(!L.length)return;state.lofi.idx=(state.lofi.idx+1)%L.length;save();loadVid();renderLofi();}
+function liveFocus(){if(!focusOpen)return;const r=state.running;const key=dk(new Date());
+  if(state.lofi.rotate&&Date.now()-vidAt>state.lofi.rotate*60000)nextVid();
+  if(!r){$('fLbl').textContent='일시정지됨';$('fClock').textContent=hms(dayTotal(key));$('fSub').textContent='오늘 순공 시간';$('fGo').textContent=lastF?'다시 시작':'타이머로 돌아가기';return;}
+  if(r.f==='mock'){const p=MOCK_PARTS.find(x=>x.k===r.part)||MOCK_PARTS[0];const rem=p.min*60-(Date.now()-r.start)/1000;
+    $('fLbl').textContent='모의고사 · '+(r.name||'')+' · '+p.ko;$('fClock').textContent=rem>=0?hms(rem):'+'+hms(-rem);$('fSub').textContent=rem>=0?'남은 시험 시간':'시험 시간 초과';$('fGo').textContent='모의고사 종료';return;}
+  const [m,k]=r.f.split('_');const s=SECS.find(x=>x.k===k);const sec=secOn(key,r.f);const tg=target(r.f);const rem=tg-sec;
+  $('fLbl').textContent=s.ko+' · '+MODES[m]+' 공부 중';
+  $('fClock').textContent=!tg?clock(sec):rem>0?clock(rem):'+'+clock(-rem).replace(/^00:/,'');
+  $('fSub').textContent=(!tg?'오늘 '+MODES[m]:rem>0?'남은 시간 · 목표 '+kmin(tg):'목표 달성! 초과 공부 중')+' · 오늘 순공 '+kmin(dayTotal(key));
+  $('fGo').textContent='일시정지';}
+function renderLofi(){setVal('lfRot',String(state.lofi.rotate));$('lfAuto').checked=state.lofi.auto;
+  $('lfList').innerHTML=state.lofi.list.map((v,i)=>`<li class="${i===state.lofi.idx%state.lofi.list.length?'cur':''}"><span>${esc(v.name)}</span><button type="button" class="sbtn" data-vdel="${i}">삭제</button></li>`).join('')||'<li><span>재생 목록이 비어 있어요. 아래에 유튜브 링크를 추가하세요.</span></li>';}
+function bindLofi(){
+  $('lofiOpen').addEventListener('click',()=>{audioOn();openFocus();});
+  $('fClose').addEventListener('click',()=>closeFocus(false));
+  $('fNext').addEventListener('click',nextVid);
+  $('fGo').addEventListener('click',()=>{const r=state.running;if(r){if(r.f==='mock')stopMock();else toggle(r.f);}else if(lastF)toggle(lastF);else closeFocus(false);liveFocus();});
+  window.addEventListener('popstate',()=>{if(focusOpen)closeFocus(true);});
+  $('lfAuto').addEventListener('change',e=>{state.lofi.auto=e.target.checked;save();});
+  $('lfRot').addEventListener('change',e=>{state.lofi.rotate=+e.target.value;save();});
+  $('lfList').addEventListener('click',e=>{const b=e.target.closest('[data-vdel]');if(!b)return;state.lofi.list.splice(+b.dataset.vdel,1);state.lofi.idx=0;save();renderLofi();});
+  $('lfForm').addEventListener('submit',e=>{e.preventDefault();const id=ytId($('lfUrl').value);if(!id){toast('유튜브 링크를 확인해 주세요');return;}
+    if(state.lofi.list.some(v=>v.id===id)){toast('이미 목록에 있어요');return;}
+    state.lofi.list.push({id,name:'내 영상 '+(state.lofi.list.length+1)+' · '+id});$('lfUrl').value='';save();renderLofi();toast('재생 목록에 추가했어요');});
+}
+
 /* ---------- 모의고사 분석 ---------- */
 function resByName(name){const n=name.trim();return state.results.find(r=>r.name.trim()===n);}
 function secScore(r,k){if(k==='write'){if(!r.write.done)return null;return [51,52,53,54].reduce((a,q)=>a+(r.write.s[q]||0),0);}return r[k].done?(50-Object.keys(r[k].wrong).length)*2:null;}
@@ -1145,7 +1235,7 @@ function render(){
   $('k7').textContent=kmin(s7);$('kAll').textContent=kmin(all);$('kDays').textContent=days+'일';
   $('secsum').innerHTML=ORDER.map(k=>{const s=SECS.find(x=>x.k===k);const tot=courseTotal(k),done=Math.min(tot,courseDoneAll(k));
     return `<div class="ss" style="--c:var(--${k})"><b>${s.ko}</b><div class="r"><div class="track"><div style="width:${tot?done/tot*100:100}%"></div></div><span>기본 ${kmin(done)} / ${state.course.total[k]}시간 · 추가 ${kmin(sumAll('x_'+k))}</span></div></div>`;}).join('');
-  setVal('wGoal',state.wordGoal);
+  setVal('wGoal',state.wordGoal);renderLofi();
   bars(today);scores();renderMocks();renderTasks();renderAna();live();renderNotif();
 }
 
@@ -1176,13 +1266,13 @@ function scores(){
 
 /* ---------- motto rotation ---------- */
 let mi=Math.floor(Math.random()*MOTTOS.length);
-function nextMotto(){const b=$('motto');b.classList.add('fade');setTimeout(()=>{mi=(mi+1)%MOTTOS.length;$('mottoText').textContent=MOTTOS[mi];b.classList.remove('fade');},350);}
+function nextMotto(){const b=$('motto');b.classList.add('fade');setTimeout(()=>{mi=(mi+1)%MOTTOS.length;$('mottoText').textContent=MOTTOS[mi];if(focusOpen)$('fMotto').textContent=MOTTOS[mi];b.classList.remove('fade');},350);}
 $('mottoText').textContent=MOTTOS[mi];
 $('motto').addEventListener('click',nextMotto);
 setInterval(nextMotto,15000);
 
 /* ---------- start ---------- */
-build();bindAna();
+build();bindAna();bindLofi();
 const savedTab=lsGet(LS_TAB);show(['timer','log','ana','score','set'].includes(savedTab)?savedTab:'timer');
 save();render();
 setInterval(live,500);
