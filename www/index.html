@@ -173,6 +173,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .mlist input{width:56px;padding:5px 6px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-variant-numeric:tabular-nums;text-align:right}
 .mlist .empty{border-style:dashed;color:var(--muted);display:block}
 
+.howto{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.55}
+.howto b{font-weight:700}
 /* vocab review */
 .vk{border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .vk.done{border-color:var(--grass);background:color-mix(in oklab,var(--grass) 6%,var(--surface))}
@@ -989,13 +991,24 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
         </div>
       </div>
       <div class="panel">
-        <h2>기록 옮기기 <small>태블릿 ↔ 휴대폰</small></h2>
-        <p class="hint">한 기기에서 <b>내보내기</b>를 눌러 코드를 복사하고, 다른 기기의 같은 칸에 붙여 넣은 뒤 <b>가져오기</b>를 누르세요. 같은 날짜의 기록은 더 긴 쪽이 남아요.</p>
-        <textarea id="xfer" placeholder="여기에 코드가 표시되거나 붙여 넣어요"></textarea>
+        <h2>기록 옮기기 · 백업 <small>태블릿 ↔ 휴대폰</small></h2>
+        <ol class="howto">
+          <li>이 기기에서 <b>백업 파일 보내기</b> → 텔레그램 <b>Избранное (저장한 메시지)</b>에 보내기</li>
+          <li>다른 기기의 텔레그램에서 그 파일을 눌러 내려받기</li>
+          <li>그 기기에서 <b>백업 파일 열기</b> → 다운로드(Telegram) 폴더에서 파일 선택</li>
+        </ol>
+        <p class="hint">두 기기의 기록이 <b>합쳐져요</b>. 아무것도 지워지지 않으니 몇 번을 해도 괜찮아요. 일주일에 한 번 백업해 두면 휴대폰을 잃어버려도 안전해요.</p>
         <div class="row">
-          <button class="btn" type="button" id="xOut">내보내기 + 복사</button>
-          <button class="btn ghost" type="button" id="xIn">가져오기</button>
+          <button class="btn" type="button" id="bkOut">백업 파일 보내기</button>
+          <label class="btn ghost filebtn">백업 파일 열기<input type="file" id="bkIn"></label>
         </div>
+        <details><summary class="hint" style="cursor:pointer">코드로 옮기기 (예전 방식)</summary>
+          <textarea id="xfer" placeholder="여기에 코드가 표시되거나 붙여 넣어요" style="margin-top:8px"></textarea>
+          <div class="row" style="margin-top:8px">
+            <button class="btn" type="button" id="xOut">코드 복사</button>
+            <button class="btn ghost" type="button" id="xIn">코드 가져오기</button>
+          </div>
+        </details>
       </div>
     </section>
   </main>
@@ -1395,29 +1408,55 @@ function build(){
     state.relisten.push({id:Date.now(),date:dk(new Date()),name});$('rlName').value='';$('rlName').blur();save();renderTasks();renderMocks();toast(name+' 듣기 다시 듣기 완료!');});
   $('wGoal').addEventListener('change',e=>{state.wordGoal=Math.max(0,Math.round(+e.target.value||0));save();renderTasks();});
   // transfer
-  $('xOut').addEventListener('click',()=>{const code='SG2:'+btoa(unescape(encodeURIComponent(JSON.stringify({log:state.log,mocks:state.mocks,course:state.course,scores:state.scores,words:state.words,relisten:state.relisten,results:state.results,distract:state.distract,awaySec:state.awaySec,badges:state.badges,sessions:state.sessions,journal:state.journal,pomoDay:state.pomoDay,wn:state.wn,ph:state.ph,week:state.week,gks:state.gks,decks:state.decks,mplan:state.mplan}))));
+  $('xOut').addEventListener('click',()=>{const code='SG2:'+btoa(unescape(encodeURIComponent(JSON.stringify(exportData()))));
     const ta=$('xfer');ta.value=code;ta.focus();ta.select();
-    const done=()=>toast('코드를 복사했어요. 다른 기기에 붙여 넣으세요');
+    const done=()=>toast('코드를 복사했어요 ('+code.length.toLocaleString('ko-KR')+'자). 길면 파일로 보내세요');
     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(done).catch(()=>{try{document.execCommand('copy');done();}catch(e){toast('코드를 길게 눌러 복사하세요');}});
     else{try{document.execCommand('copy');done();}catch(e){toast('코드를 길게 눌러 복사하세요');}}});
-  $('xIn').addEventListener('click',()=>{const raw=$('xfer').value.trim();
-    try{if(!/^SG[12]:/.test(raw))throw 0;const data=normalize(JSON.parse(decodeURIComponent(escape(atob(raw.slice(4))))));
-      let n=0;Object.entries(data.log).forEach(([key,day])=>{const mine=state.log[key]||(state.log[key]={});
-        Object.entries(day).forEach(([f,v])=>{if((+v||0)>(mine[f]||0)){mine[f]=+v;n++;}});});
-      data.mocks.forEach(m=>{if(!state.mocks.some(x=>x.id===m.id)){state.mocks.push(m);n++;}});
-      SECS.forEach(s=>{state.course.done[s.k]=Math.max(state.course.done[s.k],data.course.done[s.k]);});
-      Object.entries(data.words).forEach(([k,v])=>{if(v>(state.words[k]||0)){state.words[k]=v;n++;}});
-      data.results.forEach(r=>{if(!state.results.some(x=>x.id===r.id)){state.results.push(r);n++;}});
-      data.sessions.forEach(x=>{if(!state.sessions.some(y=>y.id===x.id)){state.sessions.push(x);n++;}});state.sessions.sort((a,b)=>a.id-b.id);
-      Object.entries(data.journal).forEach(([k,j])=>{const m=state.journal[k];if(!m){state.journal[k]=j;n++;}else{['l','h','n','sleep','cond'].forEach(f=>{if((m[f]===null||m[f]===undefined||m[f]==='')&&j[f]!==null&&j[f]!==undefined&&j[f]!==''){m[f]=j[f];n++;}});}});
-      Object.entries(data.pomoDay).forEach(([k,v])=>{if(v>(state.pomoDay[k]||0)){state.pomoDay[k]=v;n++;}});
-      Object.entries(data.wn).forEach(([k,w])=>{const m=state.wn[k];if(!m||(w.last||'')>(m.last||'')){state.wn[k]=w;n++;}});
-      data.decks.forEach(d=>{const m=state.decks.find(x=>x.id===d.id);if(!m){state.decks.push(d);n++;}else{const u=[...new Set(m.reviews.concat(d.reviews))].sort().slice(0,9);if(u.length!==m.reviews.length){m.reviews=u;n++;}if(!m.words&&d.words)m.words=d.words;}});
-      Object.entries(data.ph.known).forEach(([k,v])=>{if(!state.ph.known[k]){state.ph.known[k]=v;n++;}});
-      data.relisten.forEach(r=>{if(!state.relisten.some(x=>x.id===r.id)){state.relisten.push(r);n++;}});
-      save();render();$('xfer').value='';toast(n?'기록을 가져왔어요 ('+n+'개 항목 갱신)':'이미 최신 기록이에요');}
-    catch(e){toast('코드가 올바르지 않아요. 다시 복사해 주세요');}});
+  $('xIn').addEventListener('click',()=>{try{const n=importData(parseBackup($('xfer').value));$('xfer').value='';toast(n?'기록을 가져왔어요 ('+n+'개 항목 갱신)':'이미 최신 기록이에요');}
+    catch(e){toast('코드가 중간에 잘렸어요. 텔레그램은 긴 글을 나눠 보내요. 백업 파일로 옮겨 주세요');}});
+  $('bkOut').addEventListener('click',shareBackup);
+  $('bkIn').addEventListener('change',e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+    const rd=new FileReader();rd.onload=()=>{try{const n=importData(parseBackup(rd.result));toast(n?'백업을 합쳤어요 ('+n+'개 항목 갱신)':'이미 최신 기록이에요');}
+      catch(err){toast('이 파일은 순공 다이어리 백업 파일이 아니에요. sungong-backup으로 시작하는 파일을 고르세요');}};
+    rd.onerror=()=>toast('파일을 읽지 못했어요. 다시 내려받아 주세요');rd.readAsText(f);});
 }
+
+/* ---------- 백업 · 기록 옮기기 ---------- */
+function exportData(){return {log:state.log,mocks:state.mocks,course:state.course,scores:state.scores,words:state.words,relisten:state.relisten,results:state.results,distract:state.distract,awaySec:state.awaySec,badges:state.badges,sessions:state.sessions,journal:state.journal,pomoDay:state.pomoDay,wn:state.wn,ph:state.ph,week:state.week,gks:state.gks,decks:state.decks,mplan:state.mplan,wordGoal:state.wordGoal};}
+function parseBackup(t){t=String(t||'').replace(/[\u200B-\u200D\uFEFF]/g,'').trim();
+  if(t.startsWith('{')){const o=JSON.parse(t);return o&&o.app==='sungong-diary'&&o.data?o.data:o;}
+  const i=t.search(/SG\d:/);let b=(i>=0?t.slice(i+4):t).replace(/[^A-Za-z0-9+/=]/g,'');
+  return JSON.parse(decodeURIComponent(escape(atob(b))));}
+function importData(raw){if(!raw||typeof raw!=='object'||(!raw.log&&!raw.mocks&&!raw.decks))throw new Error('not backup');
+  const data=normalize(raw);let n=0;
+  Object.entries(data.log).forEach(([key,day])=>{const mine=state.log[key]||(state.log[key]={});Object.entries(day).forEach(([f,v])=>{if((+v||0)>(mine[f]||0)){mine[f]=+v;n++;}});});
+  data.mocks.forEach(m=>{if(!state.mocks.some(x=>x.id===m.id)){state.mocks.push(m);n++;}});
+  SECS.forEach(s2=>{state.course.done[s2.k]=Math.max(state.course.done[s2.k],data.course.done[s2.k]);});
+  Object.entries(data.words).forEach(([k,v])=>{if(v>(state.words[k]||0)){state.words[k]=v;n++;}});
+  data.results.forEach(r=>{const m=state.results.find(x=>x.id===r.id);if(!m){state.results.push(r);n++;}});
+  data.sessions.forEach(x=>{if(!state.sessions.some(y=>y.id===x.id)){state.sessions.push(x);n++;}});state.sessions.sort((a,b)=>a.id-b.id);
+  Object.entries(data.journal).forEach(([k,j])=>{const m=state.journal[k];if(!m){state.journal[k]=j;n++;}else{['l','h','n','sleep','cond'].forEach(f=>{if((m[f]===null||m[f]===undefined||m[f]==='')&&j[f]!==null&&j[f]!==undefined&&j[f]!==''){m[f]=j[f];n++;}});
+    (j.g||[]).forEach((g,i)=>{if(g&&g.t&&m.g&&m.g[i]&&!m.g[i].t){m.g[i]=g;n++;}else if(g&&g.d&&m.g&&m.g[i]&&m.g[i].t===g.t&&!m.g[i].d){m.g[i].d=true;n++;}});}});
+  Object.entries(data.pomoDay).forEach(([k,v])=>{if(v>(state.pomoDay[k]||0)){state.pomoDay[k]=v;n++;}});
+  Object.entries(data.distract).forEach(([k,v])=>{if(v>(state.distract[k]||0)){state.distract[k]=v;}});
+  Object.entries(data.badges).forEach(([k,v])=>{if(!state.badges[k])state.badges[k]=v;});
+  Object.entries(data.wn).forEach(([k,w])=>{const m=state.wn[k];if(!m||(w.last||'')>(m.last||'')||(!m.memo&&w.memo)){state.wn[k]=Object.assign({},m||{},w,{memo:(m&&m.memo)||w.memo||''});n++;}});
+  data.decks.forEach(d=>{const m=state.decks.find(x=>x.id===d.id||x.name===d.name);if(!m){state.decks.push(d);n++;}else{const u=[...new Set(m.reviews.concat(d.reviews))].sort().slice(0,9);if(u.length!==m.reviews.length){m.reviews=u;n++;}if(!m.words&&d.words){m.words=d.words;n++;}}});
+  data.mplan.forEach(x=>{if(!state.mplan.some(y=>y.n===x.n&&y.part===x.part)){state.mplan.push(x);n++;}});
+  data.gks.items.forEach(x=>{const m=state.gks.items.find(y=>y.id===x.id||y.t===x.t);if(!m){state.gks.items.push(x);n++;}else if(x.done&&!m.done){m.done=true;n++;}});
+  Object.entries(data.ph.known).forEach(([k,v])=>{if(!state.ph.known[k]){state.ph.known[k]=v;n++;}});
+  data.ph.custom.forEach(c=>{if(!state.ph.custom.some(x=>x.id===c.id)){state.ph.custom.push(c);n++;}});
+  data.relisten.forEach(r=>{if(!state.relisten.some(x=>x.id===r.id)){state.relisten.push(r);n++;}});
+  save();render();scheduleAll();return n;}
+async function shareBackup(){const t=new Date();const name='sungong-backup-'+dk(t)+'.json';
+  const txt=JSON.stringify({app:'sungong-diary',v:3,exported:t.toISOString(),data:exportData()});
+  const FSY=plug('Filesystem'),SH=plug('Share');
+  if(FSY&&SH){try{const r=await FSY.writeFile({path:name,data:txt,directory:'CACHE',encoding:'utf8'});
+      await SH.share({title:'순공 다이어리 백업',text:'순공 다이어리 백업 '+dk(t),files:[r.uri],dialogTitle:'백업 파일 보내기'});
+      toast('백업 파일을 보냈어요. 다른 기기에서 백업 파일 열기를 누르세요');return;}
+    catch(e){if(/cancel/i.test(String(e&&e.message||e)))return;toast('파일 공유가 안 돼요. 아래 코드 방식을 써 주세요');}}
+  else toast('백업 파일은 앱에서만 보낼 수 있어요');}
 
 /* ---------- timer control ---------- */
 function stopRunning(){const r=state.running;if(!r)return null;const now=Date.now();
