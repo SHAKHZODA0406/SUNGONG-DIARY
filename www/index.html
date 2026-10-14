@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
 <meta name="theme-color" content="#102F66">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="순공 다이어리">
 <title>순공 다이어리</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1016,7 +1023,7 @@ textarea{min-height:84px;font-size:12px;font-family:ui-monospace,monospace;resiz
 <div class="focus" id="focus" hidden>
   <div class="fv"><div class="amb" id="fvAmb"></div><div id="fvFrame"></div></div>
   <div class="fshade"></div>
-  <div class="fhint" id="fHint">타이머가 멈추면 영상도 멈추고, 다시 시작하면 멈춘 곳부터 이어서 재생돼요</div>
+  <div class="fhint" id="fHint">타이머가 멈추면 영상도 멈추고, 다시 시작하면 멈춘 곳부터 이어서 재생돼요<br>영상이 안 나오면 화면 가운데를 한 번 눌러 주세요</div>
   <div class="ftop"><div style="min-width:0"><span class="fchip" id="fName">—</span><div class="fsrc" id="fSrc"></div></div><div class="fbtns"><button type="button" class="gbtn" id="fNext">다른 영상</button><button type="button" class="gbtn" id="fClose">닫기</button></div></div>
   <div class="fbot">
     <small id="fLbl">—</small>
@@ -1079,6 +1086,9 @@ const Cap=window.Capacitor;
 const isNative=!!(Cap&&Cap.isNativePlatform&&Cap.isNativePlatform());
 const plug=n=>(isNative&&Cap.Plugins&&Cap.Plugins[n])||null;
 const LN=plug('LocalNotifications'),PREF=plug('Preferences');
+const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+if(!isNative){try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}
+  if('serviceWorker' in navigator&&location.protocol==='https:'){window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}}
 
 /* ---------- state ---------- */
 function validTime(t,d){return /^\d{2}:\d{2}$/.test(t||'')?t:d}
@@ -1321,7 +1331,7 @@ async function timerNotify(){
 }
 function renderNotif(){
   const st=$('nStatus'),pill=$('notifPill');let msg,warn=false;
-  if(!isNative){msg='알림은 휴대폰·태블릿 앱에서만 동작해요.';pill.textContent='웹 미리보기';}
+  if(!isNative){msg=IS_IOS?'iPad·iPhone 웹 버전은 예약 알림을 보낼 수 없어요. D-day와 응원 메시지는 Claude 앱 알림으로 받아요. 타이머 종료 소리는 이 화면에서 울려요.':'알림은 안드로이드 앱에서만 동작해요.';pill.textContent=IS_IOS?'iPad 웹 버전':'웹 버전';}
   else if(!state.notif.on){msg='알림이 꺼져 있어요.';pill.textContent='알림 꺼짐';}
   else if(notifInfo.perm==='denied'){msg='알림 권한이 꺼져 있어요. 휴대폰 설정 → 애플리케이션 → 순공 다이어리 → 알림을 켜 주세요.';warn=true;pill.textContent='알림 권한 필요';}
   else if(notifInfo.perm==='granted'){msg='알림 켜짐 · 앞으로 3주 동안 '+notifInfo.count+'개의 알림이 예약되어 있어요.'+(notifInfo.exact==='denied'?' 정확한 시간에 받으려면 아래 버튼을 눌러 주세요.':'');pill.textContent='알림 켜짐';}
@@ -1456,7 +1466,11 @@ async function shareBackup(){const t=new Date();const name='sungong-backup-'+dk(
       await SH.share({title:'순공 다이어리 백업',text:'순공 다이어리 백업 '+dk(t),files:[r.uri],dialogTitle:'백업 파일 보내기'});
       toast('백업 파일을 보냈어요. 다른 기기에서 백업 파일 열기를 누르세요');return;}
     catch(e){if(/cancel/i.test(String(e&&e.message||e)))return;toast('파일 공유가 안 돼요. 아래 코드 방식을 써 주세요');}}
-  else toast('백업 파일은 앱에서만 보낼 수 있어요');}
+  else{try{const file=new File([txt],name,{type:'application/json'});
+      if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'순공 다이어리 백업'});toast('백업 파일을 보냈어요. 다른 기기에서 백업 파일 열기를 누르세요');return;}}
+    catch(e){if(e&&e.name==='AbortError')return;}
+    try{const u=URL.createObjectURL(new Blob([txt],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('백업 파일을 저장했어요 (다운로드 · 파일 앱)');}
+    catch(e){toast('파일 저장이 안 돼요. 아래 코드 방식을 써 주세요');}}}
 
 /* ---------- timer control ---------- */
 function stopRunning(){const r=state.running;if(!r)return null;const now=Date.now();
