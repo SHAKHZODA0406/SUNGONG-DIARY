@@ -1147,9 +1147,12 @@ const WEEK_DEF=[120,120,120,120,120,90,300];
 const GKS_DEF=['전공 정하기 (연세대 경영학 · HR 세부 전공 확인)','희망 지도교수 · 연구 분야 조사','학업계획서 초안 쓰기','학업계획서 첨삭 · 완성','자기소개서 쓰기','추천서 2부 부탁하기','졸업(예정) · 성적 증명서 준비 (아포스티유)','TOPIK 성적표 출력','IELTS 응시 · 성적표 받기','대사관 트랙 서류 제출 (2월)'];
 const LOFI_DEF=[{id:'lTRiuFIWV54',name:'Lofi Girl · 1번'},{id:'53gNFOqDFcE',name:'Lofi Girl · 2번'},{id:'W6ZxmajIt8M',name:'Lofi Girl · 3번'},{id:'W5FI97ovWog',name:'Lofi Girl · 4번'},{id:'5jZvtNHLJZc',name:'Lofi Girl · 5번'},{id:'BTYAsjAVa3I',name:'Lofi Girl · 6번'},{id:'FxsevJUKcDU',name:'Lofi Girl · 7번'},{id:'-PKH4bsjlm0',name:'Lofi Girl · 8번'},{id:'wAPCSnAhhC8',name:'Lofi Girl · 9번'},{id:'TURbeWK2wwg',name:'Lofi Girl · 10번'},{id:'l98w9OSKVNA',name:'Lofi Girl · 11번'},{id:'Z_8f5IWuTFg',name:'Lofi Girl · 12번'}];
 const W_MAX={51:10,52:10,53:30,54:50};
-const R_LR=['단어·문법 몰라서','바꿔 말하기 못 알아봄','안 들림 (속도·발음)','문장 끝 놓침','함정에 걸림','태도·말하는 방식 표현','내용 흐름 놓침','시간 부족','집중력 끊김'];
+const R_MAIN=['단어·문법 몰라서','바꿔 말하기 못 알아봄','안 들림 (속도·발음)','문장 끝 놓침','태도·말하는 방식 표현','내용 흐름 놓침','시간 부족','집중력 끊김'];
+// The 7 trap types from the listening lessons, shown as one group in the picker
+const R_TRAP=['함정 · 시간 바꾸기','함정 · 사람 바꾸기','함정 · 같은 단어','함정 · 숫자·순위','함정 · 부정어','함정 · 정도 (모두↔일부)','함정 · 상대 의견','함정 · 기타'];
+const R_LR=R_MAIN.concat(R_TRAP);
 // Earlier reason names are moved to the new ones when records load, so past statistics carry over.
-const R_OLD={'어휘·표현 몰라서':'단어·문법 몰라서','문법':'단어·문법 몰라서','내용 이해 부족':'내용 흐름 놓침','선택지 헷갈림':'함정에 걸림','실수·집중력':'집중력 끊김','듣기 속도·발음':'안 들림 (속도·발음)'};
+const R_OLD={'어휘·표현 몰라서':'단어·문법 몰라서','문법':'단어·문법 몰라서','내용 이해 부족':'내용 흐름 놓침','선택지 헷갈림':'함정 · 기타','함정에 걸림':'함정 · 기타','실수·집중력':'집중력 끊김','듣기 속도·발음':'안 들림 (속도·발음)'};
 const R_W=['문법 오류','어휘 수준','원고지·띄어쓰기','분량 부족','구조·논리','주제 이탈','시간 부족'];
 function normRes(r){const lr=x=>{const w={};if(x&&x.wrong&&typeof x.wrong==='object')Object.entries(x.wrong).forEach(([q,v])=>{if(+q>=1&&+q<=50){const t=String(v||'');w[String(+q)]=R_OLD[t]||t;}});return {done:!!(x&&x.done),wrong:w};};
   const w=r.write||{};const sc={};[51,52,53,54].forEach(q=>{const v=w.s&&w.s[q];sc[q]=(v===null||v===undefined||v==='')?null:Math.max(0,Math.min(W_MAX[q],+v||0));});
@@ -1883,9 +1886,10 @@ function renderEditor(){
     $('edScore').textContent=x.done?'정답 '+(50-wn.length)+' / 50 · '+(50-wn.length)*2+'점':'아직 입력 전 · 50문항';
     if(!$('edGrid').children.length)$('edGrid').innerHTML=Array.from({length:50},(_,i)=>`<button type="button" data-q="${i+1}">${i+1}</button>`).join('');
     [...$('edGrid').children].forEach(b=>b.classList.toggle('x',!!x.wrong[b.dataset.q]||x.wrong[b.dataset.q]===''));
-    const reasons=R_LR.filter(t=>ed.sec==='listen'||t!=='안 들림 (속도·발음)');
+    const main=R_MAIN.filter(t=>ed.sec==='listen'||t!=='안 들림 (속도·발음)');
+    const opt=(t,v)=>`<option value="${esc(t)}"${t===v?' selected':''}>${esc(t.replace('함정 · ',''))}</option>`;
     $('edWrongLbl').hidden=!wn.length;
-    $('edWrong').innerHTML=wn.map(q=>{const v=x.wrong[q];return `<label class="wrong"><b>${q}번</b><select data-q="${q}" class="${v?'':'unset'}"><option value="">원인 선택</option>${(v&&!reasons.includes(v)?reasons.concat(v):reasons).map(t=>`<option${t===v?' selected':''}>${esc(t)}</option>`).join('')}</select></label>`;}).join('');
+    $('edWrong').innerHTML=wn.map(q=>{const v=x.wrong[q];return `<label class="wrong"><b>${q}번</b><select data-q="${q}" class="${v?'':'unset'}"><option value="">원인 선택</option>${main.map(t=>opt(t,v)).join('')}<optgroup label="함정에 걸림">${R_TRAP.map(t=>opt(t,v)).join('')}</optgroup>${v&&!R_LR.includes(v)?`<option selected>${esc(v)}</option>`:''}</select></label>`;}).join('');
   }else{const w=r.write;[51,52,53,54].forEach(q=>setVal('w'+q,w.s[q]));
     const sc=secScore(r,'write');$('edWScore').textContent=sc===null?'아직 입력 전 · 100점 만점':sc+' / 100점';
     $('edWR').innerHTML=R_W.map(t=>`<button type="button" aria-pressed="${w.reasons.includes(t)}">${t}</button>`).join('');}
