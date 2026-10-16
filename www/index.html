@@ -1147,7 +1147,8 @@ const WEEK_DEF=[120,120,120,120,120,90,300];
 const GKS_DEF=['전공 정하기 (연세대 경영학 · HR 세부 전공 확인)','희망 지도교수 · 연구 분야 조사','학업계획서 초안 쓰기','학업계획서 첨삭 · 완성','자기소개서 쓰기','추천서 2부 부탁하기','졸업(예정) · 성적 증명서 준비 (아포스티유)','TOPIK 성적표 출력','IELTS 응시 · 성적표 받기','대사관 트랙 서류 제출 (2월)'];
 const LOFI_DEF=[{id:'lTRiuFIWV54',name:'Lofi Girl · 1번'},{id:'53gNFOqDFcE',name:'Lofi Girl · 2번'},{id:'W6ZxmajIt8M',name:'Lofi Girl · 3번'},{id:'W5FI97ovWog',name:'Lofi Girl · 4번'},{id:'5jZvtNHLJZc',name:'Lofi Girl · 5번'},{id:'BTYAsjAVa3I',name:'Lofi Girl · 6번'},{id:'FxsevJUKcDU',name:'Lofi Girl · 7번'},{id:'-PKH4bsjlm0',name:'Lofi Girl · 8번'},{id:'wAPCSnAhhC8',name:'Lofi Girl · 9번'},{id:'TURbeWK2wwg',name:'Lofi Girl · 10번'},{id:'l98w9OSKVNA',name:'Lofi Girl · 11번'},{id:'Z_8f5IWuTFg',name:'Lofi Girl · 12번'}];
 const W_MAX={51:10,52:10,53:30,54:50};
-const R_LR=['어휘·표현 몰라서','문법','내용 이해 부족','선택지 헷갈림','시간 부족','실수·집중력','듣기 속도·발음'];
+// Old reasons stay in the list so earlier records keep showing and counting.
+const R_LR=['어휘·표현 몰라서','바꿔 말하기 못 알아봄','문법','내용 이해 부족','태도·말하는 방식 표현','선택지 헷갈림','함정에 걸림','문장 끝 놓침','시간 부족','실수·집중력','듣기 속도·발음'];
 const R_W=['문법 오류','어휘 수준','원고지·띄어쓰기','분량 부족','구조·논리','주제 이탈','시간 부족'];
 function normRes(r){const lr=x=>{const w={};if(x&&x.wrong&&typeof x.wrong==='object')Object.entries(x.wrong).forEach(([q,v])=>{if(+q>=1&&+q<=50)w[String(+q)]=String(v||'');});return {done:!!(x&&x.done),wrong:w};};
   const w=r.write||{};const sc={};[51,52,53,54].forEach(q=>{const v=w.s&&w.s[q];sc[q]=(v===null||v===undefined||v==='')?null:Math.max(0,Math.min(W_MAX[q],+v||0));});
